@@ -1,0 +1,28 @@
+C:\Users\שרי כהנא\Desktop\WebApi\DL\bin\Debug\net9.0\DL.deps.json
+C:\Users\שרי כהנא\Desktop\WebApi\DL\bin\Debug\net9.0\DL.dll
+C:\Users\שרי כהנא\Desktop\WebApi\DL\bin\Debug\net9.0\DL.pdb
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.csproj.AssemblyReference.cache
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.AssemblyInfoInputs.cache
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.AssemblyInfo.cs
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.csproj.CoreCompileInputs.cache
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.dll
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\refint\DL.dll
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.pdb
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\ref\DL.dll
+C:\Users\שרי כהנא\Desktop\WebApi\DL\bin\Debug\net9.0\DL.runtimeconfig.json
+C:\Users\שרי כהנא\Desktop\WebApi\DL\obj\Debug\net9.0\DL.genruntimeconfig.cache
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\bin\Debug\net9.0\DL.deps.json
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\bin\Debug\net9.0\DL.runtimeconfig.json
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\bin\Debug\net9.0\DL.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\bin\Debug\net9.0\DL.pdb
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.csproj.AssemblyReference.cache
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.AssemblyInfoInputs.cache
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.AssemblyInfo.cs
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.csproj.CoreCompileInputs.cache
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\refint\DL.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.pdb
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\DL.genruntimeconfig.cache
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\WebApi\DL\obj\Debug\net9.0\ref\DL.dll
