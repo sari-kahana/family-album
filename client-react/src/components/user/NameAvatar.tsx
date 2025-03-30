@@ -1,10 +1,10 @@
 import Avatar from '@mui/material/Avatar';
-import { UserContext } from './MyUserContext';
-import { Stack } from '@mui/material';
-import React from 'react';
+import { UserContext } from './UserContext';
+import { Stack, Typography } from '@mui/material';
+import React, { useContext } from 'react';
 
 
-const NameAvatar = ({ url }: { url: string }) => {
+const NameAvatar = () => {
     function stringToColor(string: string) {
         let hash = 0;
         let i;
@@ -31,13 +31,13 @@ const NameAvatar = ({ url }: { url: string }) => {
         };
     }
 
-    const { user } = React.useContext(UserContext)
+    const { user } = useContext(UserContext)
     console.log(user);
 
     return (<>
-        <Stack direction="column" spacing={2}>
-            <Avatar {...stringAvatar(user.firstName)} />
-            {`${user.firstName} ${user.lastName}`}
+        <Stack direction="column" spacing={2} sx={{ position: "fixed", top: 10, left:10}}>
+            <Avatar {...stringAvatar(user.name)} />
+            {user.name}
         </Stack>
     </>)
 

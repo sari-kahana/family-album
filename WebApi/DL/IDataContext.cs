@@ -11,6 +11,9 @@ namespace DL
     public interface IDataContext
     {
         public DbSet<User> Users { get; set; }
-        int SaveChanges();
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Album> Albums { get; set; }
+
+        public Task<int> SaveChangesAsync();
     }
 }

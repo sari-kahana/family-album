@@ -3784,11 +3784,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\WebApi\\DL\\DL.csproj",
+      "projectUniqueName": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\פרקטיקום\\WebApi\\DL\\DL.csproj",
       "projectName": "DL",
-      "projectPath": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\WebApi\\DL\\DL.csproj",
+      "projectPath": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\פרקטיקום\\WebApi\\DL\\DL.csproj",
       "packagesPath": "C:\\Users\\שרי כהנא\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\WebApi\\DL\\obj\\",
+      "outputPath": "C:\\Users\\שרי כהנא\\Desktop\\תכנות\\שנה ב\\פרקטיקום\\WebApi\\DL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

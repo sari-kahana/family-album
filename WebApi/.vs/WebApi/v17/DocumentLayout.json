@@ -1,10 +1,50 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\WebApi\\",
+  "WorkspaceRootPath": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\WebApi\\DL\\Migrations\\20250319233541_PhotoAlbum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DL\\Migrations\\20250319233541_PhotoAlbum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\dl\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|solutionrelative:dl\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\bl\\services\\albumservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|solutionrelative:bl\\services\\albumservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\dl\\entities\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|solutionrelative:dl\\entities\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\dl\\entities\\album.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15DB6953-A19A-43AF-8C21-1159B21491F1}|DL\\DL.csproj|solutionrelative:dl\\entities\\album.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\bl\\services\\imageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|solutionrelative:bl\\services\\imageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\bl\\interfacesservices\\iimageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|solutionrelative:bl\\interfacesservices\\iimageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\webapi\\controllers\\uploadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\uploadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\webapi\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\webapi\\controllers\\albumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E015EF5D-18EB-435B-AD08-14F61CEE3709}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\albumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Migrations\\20250330030339_tables.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DL\\Migrations\\20250330030339_tables.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|c:\\users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\webapi\\bl\\interfacesservices\\ialbumservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E85D7376-7975-4000-A143-EA9FDE67325F}|BL\\BL.csproj|solutionrelative:bl\\interfacesservices\\ialbumservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +59,143 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "20250319233541_PhotoAlbum.cs",
-              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\WebApi\\DL\\Migrations\\20250319233541_PhotoAlbum.cs",
-              "RelativeDocumentMoniker": "DL\\Migrations\\20250319233541_PhotoAlbum.cs",
-              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\WebApi\\DL\\Migrations\\20250319233541_PhotoAlbum.cs",
-              "RelativeToolTip": "DL\\Migrations\\20250319233541_PhotoAlbum.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAEA1wAAAAAAAAAAAAAAAAA==",
+              "Title": "DataContext.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\DataContext.cs",
+              "RelativeDocumentMoniker": "DL\\DataContext.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\DataContext.cs",
+              "RelativeToolTip": "DL\\DataContext.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAxwBEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-19T23:35:41.601Z",
+              "WhenOpened": "2025-03-30T04:36:24.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Album.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Entities\\Album.cs",
+              "RelativeDocumentMoniker": "DL\\Entities\\Album.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Entities\\Album.cs",
+              "RelativeToolTip": "DL\\Entities\\Album.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-30T03:09:07.491Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "20250330030339_tables.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Migrations\\20250330030339_tables.cs",
+              "RelativeDocumentMoniker": "DL\\Migrations\\20250330030339_tables.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Migrations\\20250330030339_tables.cs",
+              "RelativeToolTip": "DL\\Migrations\\20250330030339_tables.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-30T03:03:39.204Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Image.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Entities\\Image.cs",
+              "RelativeDocumentMoniker": "DL\\Entities\\Image.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\DL\\Entities\\Image.cs",
+              "RelativeToolTip": "DL\\Entities\\Image.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-30T02:57:14.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UploadController.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\UploadController.cs",
+              "RelativeDocumentMoniker": "WebApi\\Controllers\\UploadController.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\UploadController.cs",
+              "RelativeToolTip": "WebApi\\Controllers\\UploadController.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwDkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-30T02:56:13.568Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AlbumController.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\AlbumController.cs",
+              "RelativeDocumentMoniker": "WebApi\\Controllers\\AlbumController.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\AlbumController.cs",
+              "RelativeToolTip": "WebApi\\Controllers\\AlbumController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwDkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T17:45:15.87Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AlbumService.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\Services\\AlbumService.cs",
+              "RelativeDocumentMoniker": "BL\\Services\\AlbumService.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\Services\\AlbumService.cs",
+              "RelativeToolTip": "BL\\Services\\AlbumService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwB0AAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T17:40:49.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IAlbumService.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\InterfacesServices\\IAlbumService.cs",
+              "RelativeDocumentMoniker": "BL\\InterfacesServices\\IAlbumService.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\InterfacesServices\\IAlbumService.cs",
+              "RelativeToolTip": "BL\\InterfacesServices\\IAlbumService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T17:39:54.301Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ImageService.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\Services\\ImageService.cs",
+              "RelativeDocumentMoniker": "BL\\Services\\ImageService.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\Services\\ImageService.cs",
+              "RelativeToolTip": "BL\\Services\\ImageService.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAowDEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T14:57:23.257Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IImageService.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\InterfacesServices\\IImageService.cs",
+              "RelativeDocumentMoniker": "BL\\InterfacesServices\\IImageService.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\BL\\InterfacesServices\\IImageService.cs",
+              "RelativeToolTip": "BL\\InterfacesServices\\IImageService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAuwA0AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T14:56:16.706Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ImageController.cs",
+              "DocumentMoniker": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\ImageController.cs",
+              "RelativeDocumentMoniker": "WebApi\\Controllers\\ImageController.cs",
+              "ToolTip": "C:\\Users\\\u05E9\u05E8\u05D9 \u05DB\u05D4\u05E0\u05D0\\Desktop\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05E0\u05D4 \u05D1\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\WebApi\\WebApi\\Controllers\\ImageController.cs",
+              "RelativeToolTip": "WebApi\\Controllers\\ImageController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T14:51:22.172Z",
               "EditorCaption": ""
             }
           ]

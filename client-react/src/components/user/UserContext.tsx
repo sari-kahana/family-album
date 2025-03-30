@@ -1,5 +1,5 @@
 import { createContext, useReducer } from "react";
-import { Action, User } from "../Types";
+import { Action, User } from "../../Types";
 
 const userReducer = (state: User, action: Action): User => {
   switch (action.type) {
@@ -8,7 +8,7 @@ const userReducer = (state: User, action: Action): User => {
       return {
         ...state,
         id: action.data.id ?? state.id,
-        firstName: action.data.firstName ?? state.firstName,
+        name: action.data.name ?? state.name,
         email: action.data.email ?? state.email,
         password: action.data.password ?? state.password,
       };
@@ -30,8 +30,7 @@ const userReducer = (state: User, action: Action): User => {
 
 export const emptyUser: User = {
   id: "",
-  firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   password: "",
   phone: "",

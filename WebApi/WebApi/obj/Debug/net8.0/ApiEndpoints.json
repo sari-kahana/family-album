@@ -1,7 +1,170 @@
 [
   {
+    "ContainingType": "WebApi.Controllers.AlbumController",
+    "Method": "GetAllAlbums",
+    "RelativePath": "api/Album",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.AlbumController",
+    "Method": "AddAlbum",
+    "RelativePath": "api/Album",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "album",
+        "Type": "DL.Entities.Album",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.AlbumController",
+    "Method": "GetAlbumById",
+    "RelativePath": "api/Album/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.AlbumController",
+    "Method": "UpdateAlbum",
+    "RelativePath": "api/Album/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "album",
+        "Type": "DL.Entities.Album",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.AlbumController",
+    "Method": "DeleteAlbum",
+    "RelativePath": "api/Album/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "GetAllImages",
+    "RelativePath": "api/Image",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "AddFile",
+    "RelativePath": "api/Image",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "DL.Entities.Image",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "GetImageById",
+    "RelativePath": "api/Image/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "DeleteImage",
+    "RelativePath": "api/Image/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.UploadController",
+    "Method": "GetPresignedUrl",
+    "RelativePath": "api/upload/presigned-url",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "albumId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ownerId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApi.Controllers.UserController",
-    "Method": "GetAllUsers",
+    "Method": "GetAllUsersAsync",
     "RelativePath": "api/User",
     "HttpMethod": "GET",
     "IsController": true,
@@ -9,7 +172,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[DL.Entities.User, DL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[DL.Dtos.UserDto, DL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -21,7 +184,7 @@
   },
   {
     "ContainingType": "WebApi.Controllers.UserController",
-    "Method": "AddUser",
+    "Method": "AddUserAsync",
     "RelativePath": "api/User",
     "HttpMethod": "POST",
     "IsController": true,
@@ -29,21 +192,15 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "DL.Entities.User",
+        "Type": "WebApi.Models.UserPostModel",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "WebApi.Controllers.UserController",
-    "Method": "GetUserById",
+    "Method": "GetUserByIdAsync",
     "RelativePath": "api/User/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -57,7 +214,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "DL.Entities.User",
+        "Type": "DL.Dtos.UserDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -69,7 +226,7 @@
   },
   {
     "ContainingType": "WebApi.Controllers.UserController",
-    "Method": "UpDateUser",
+    "Method": "UpDateUserAsync",
     "RelativePath": "api/User/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -86,17 +243,11 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "WebApi.Controllers.UserController",
-    "Method": "RemoveUser",
+    "Method": "RemoveUserAsync",
     "RelativePath": "api/User/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -108,12 +259,22 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.UserController",
+    "Method": "LoginUserAsync",
+    "RelativePath": "api/User/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
+        "Name": "loginRequest",
+        "Type": "WebApi.Models.LoginModel",
+        "IsRequired": true
       }
-    ]
+    ],
+    "ReturnTypes": []
   }
 ]

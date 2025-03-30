@@ -16,5 +16,5 @@ export const navStyle: CSSProperties = {
     top: '20px',
     right: '20px',
     display: 'flex',
-    gap: '10px',
+    gap: '20px',
 };

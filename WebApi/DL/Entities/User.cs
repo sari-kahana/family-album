@@ -16,6 +16,7 @@ namespace DL.Entities
         public string CreatedBy { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string UpdatedBy { get; set; }
+        public List<Album> Albums { get; set; } = new List<Album>();
 
 
         public User() { }

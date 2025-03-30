@@ -9,10 +9,12 @@ namespace BL.InterfacesServices
 {
     public interface IUserService
     {
-        public List<User> GetAllUsers();
-        public User GetUserById(int id);
-        public void AddUser(User user);
-        public void UpdateUser(int id, User user);
-        public void RemoveUser(int id);
+        public string GenerateJwtToken(string username, string[] roles);
+        public Task<List<User>> GetAllUsersAsync();
+        public Task<User> GetUserByIdAsync(int id);
+        public Task<User> AddUserAsync(User user);
+        public Task<User> LoginUserAsync(string email, string password);
+        public Task<User> UpdateUserAsync(int id, User user);
+        public Task<User> RemoveUserAsync(int id);
     }
 }

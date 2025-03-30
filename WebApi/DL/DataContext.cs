@@ -12,11 +12,16 @@ namespace DL
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Album> Albums { get; set; }
 
-        public int SaveChanges()
+        
+        public async Task<int> SaveChangesAsync()
         {
-            return base.SaveChanges();
+            return await base.SaveChangesAsync();
         }
+
+
 
     }
 }
