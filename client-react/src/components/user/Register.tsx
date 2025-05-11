@@ -2,7 +2,7 @@ import { FormEvent, use, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Box, Button, Modal, TextField } from '@mui/material';
 import axios from 'axios';
-import NameAvatar from "./NameAvatar";
+import NameAvatar from "./Connected";
 import { styleForm } from "../Style";
 
 const Register = () => {

@@ -37,12 +37,26 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddFile([FromBody] Image file)
+        public async Task<ActionResult> AddImage([FromBody] Image img)
         {
-            await _imageService.AddImageAsync(file);
-            return CreatedAtAction(nameof(GetImageById), new { id = file.Id }, file);
+            await _imageService.AddImageAsync(img);
+            return CreatedAtAction(nameof(GetImageById), new { id = img.Id }, img);
         }
 
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateImage(int id, [FromBody] Image image)
+        {
+            try
+            {
+                var updatedImage = await _imageService.UpdateImageAsync(id, image);
+                return Ok(updatedImage);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
 
         /// <summary>
         /// מחיקת תמונה

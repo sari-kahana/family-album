@@ -57,7 +57,7 @@ namespace WebApi.Controllers
 
                 if (user == null)
                     return Unauthorized(new { Message = "Invalid email or password" });
-                var token = _userService.GenerateJwtToken(user.Name, new[] { "User" });
+                var token = await _userService.GenerateJwtTokenAsync(user.Name, new[] { "User" });
                 return Ok(new
                 {
                     Message = "Login successful",

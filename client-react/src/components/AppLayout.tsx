@@ -13,7 +13,7 @@ const AppLayout = () => {
         <Register /> 
         {/* <Button component={Link} to="MyGallery">My Gallery</Button>  */}
         {/* <Button component={Link} to="upload">Upload Image</Button>  */}
-        <Button component={Link} to="albums">My Gallery</Button> 
+        {/* <Button component={Link} to="albums">My Gallery</Button>  */}
       </Box>
     </>
   );

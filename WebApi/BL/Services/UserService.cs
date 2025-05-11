@@ -26,13 +26,20 @@ namespace BL.Services
             _dataContext = dataContext;
             _configuration = configuration;
         }
-        public string GenerateJwtToken(string username, string[] roles)
+        public async Task<string> GenerateJwtTokenAsync(string username, string[] roles)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.Name, username)
+            //};
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Name == username);
+
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // זה מה שחסר
                 new Claim(ClaimTypes.Name, username)
             };
 

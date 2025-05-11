@@ -10,7 +10,7 @@ namespace DL.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        //public int UserId { get; set; }
+        public int UserId { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
@@ -18,11 +18,11 @@ namespace DL.Entities
 
         public Album() { }
 
-        public Album(int id, string name/*, int userId*/)
+        public Album(int id, string name, int userId)
         {
             Id = id;    
             Name = name;
-            //UserId = userId;
+            UserId = userId;
         }
 
     }

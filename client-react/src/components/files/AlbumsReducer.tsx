@@ -12,7 +12,7 @@ export const albumReducer = (state: Album[], action: AlbumAction): Album[] => {
                 album.id === action.payload.id ? { ...album, ...action.payload } : album
             );
         case 'DELETE_ALBUM':
-            return state.filter((album) => album.id !== action.payload.id);
+            return state.filter((album) => album.id !== action.payload.albumId);
         default:
             return state;
     }

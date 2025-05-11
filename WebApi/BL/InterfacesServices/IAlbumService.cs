@@ -9,10 +9,10 @@ namespace BL.InterfacesServices
 {
     public interface IAlbumService
     {
-        public Task<List<Album>> GetAllAlbumsAsync();
+        public Task<List<Album>> GetAllAlbumsAsync(int userId);
         public Task<Album> GetAlbumByIdAsync(int id);
         public Task<Album> AddAlbumAsync(Album album);
-        public Task<Album> UpdateAlbumAsync(int id, Album album);
+        public Task<Album> UpdateAlbumAsync(int id, string albumNAme);
         public Task<Album> RemoveAlbumAsync(int id);
     }
 }

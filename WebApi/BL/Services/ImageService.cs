@@ -21,16 +21,16 @@ namespace BL.Services
 
         public async Task<List<Image>> GetAllImagesAsync()
         {
-            var files = await _dataContext.Images.Where(file => !file.IsDeleted).ToListAsync();
-            return files;
+            var images = await _dataContext.Images.Where(img => !img.IsDeleted).ToListAsync();
+            return images;
         }
 
         public async Task<Image> GetImageByIdAsync(int id)
         {
-            var file = await _dataContext.Images.FirstOrDefaultAsync(f => f.Id == id);
-            if (file == null || file.IsDeleted)
+            var img = await _dataContext.Images.FirstOrDefaultAsync(f => f.Id == id);
+            if (img == null || img.IsDeleted)
                 throw new Exception("Image Not Found");
-            return file;
+            return img;
         }
 
         //public async Task AddImageAsync(Image img)
@@ -51,22 +51,27 @@ namespace BL.Services
 
         public async Task<Image> RemoveImageAsync(int id)
         {
-            var fileToRemove = await GetImageByIdAsync(id);
-            fileToRemove.IsDeleted = true;
-            //_dataContext.Images.Remove(fileToRemove);
+            var imgToRemove = await GetImageByIdAsync(id);
+            imgToRemove.IsDeleted = true;
+            //_dataContext.Images.Remove(imgToRemove);
             await _dataContext.SaveChangesAsync();
-            return fileToRemove;
+            return imgToRemove;
 
         }
 
         public async Task<Image> UpdateImageAsync(int id, Image img)
         {
-            var imgToUpdate = await _dataContext.Images.FirstOrDefaultAsync(i => i.Id == id);
+            var imgToUpdate = await GetImageByIdAsync(id);
             if (imgToUpdate == null)
             {
                 throw new Exception("image not found");
             }
-            imgToUpdate = img;
+
+            imgToUpdate.Name = img.Name;
+            imgToUpdate.Type = img.Type;
+            imgToUpdate.Size = img.Size;
+            imgToUpdate.S3URL = img.S3URL;
+            imgToUpdate.UpdatedAt = DateTime.UtcNow;
             await _dataContext.SaveChangesAsync();
             return img;
         }

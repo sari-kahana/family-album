@@ -5,6 +5,7 @@ import FileUploader from "./files/FileUploader";
 import MyGallery from "./files/MyGallery";
 import Albums from "./files/Albums";
 import HomePage from "./HomePage";
+import Collages from "./files/collages";
 
 const Router = createBrowserRouter([{
     path: '/',
@@ -14,6 +15,7 @@ const Router = createBrowserRouter([{
         {path: 'albums', element: <Albums/>},
         {path: 'albums/:id', element: <MyGallery/>},
         { path: 'albums/:id/upload', element: <FileUploader/>},
+        {path: 'collages', element: <Collages/>},
 
 
 

@@ -4,24 +4,30 @@ import { Action, User } from "../../Types";
 const userReducer = (state: User, action: Action): User => {
   switch (action.type) {
     case "CREATE":
-      console.log("create new user");
       return {
         ...state,
         id: action.data.id ?? state.id,
         name: action.data.name ?? state.name,
         email: action.data.email ?? state.email,
         password: action.data.password ?? state.password,
+        phone: action.data.phone ?? state.phone,
+        isConnected: action.data.isConnected ?? state.isConnected,
       };
 
     case "UPDATE":
-      console.log("update");
       return {
         ...state,
         ...action.data,
       };
 
     case "DELETE":
-      return emptyUser; 
+      return emptyUser;
+
+    case "LOGIN":
+      return { ...state, isConnected: true };
+      
+    case "LOGOUT":
+      return { ...state, isConnected: false };
 
     default:
       return state;
@@ -34,6 +40,7 @@ export const emptyUser: User = {
   email: "",
   password: "",
   phone: "",
+  isConnected: false,
 };
 
 export const UserContext = createContext<{
@@ -41,7 +48,7 @@ export const UserContext = createContext<{
   dispatch: React.Dispatch<Action>;
 }>({
   user: emptyUser,
-  dispatch: () => {},
+  dispatch: () => { },
 });
 
 const MyUserContext = ({ children }: { children: React.ReactNode }) => {

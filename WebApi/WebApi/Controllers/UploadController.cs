@@ -38,24 +38,27 @@ namespace WebApi.Controllers
                 };
 
                 string url = _s3Client.GetPreSignedURL(request);
-
-                string s3url = $"https://pictures-testpnoren.s3.amazonaws.com/{fileName}";
-
-                // יצירת אובייקט תמונה ושמירה במסד הנתונים
-                var image = new Image
-                {
-                    Name = fileName,
-                    S3URL = s3url, // עדכון לכתובת המלאה
-                    Type = 1, // נניח שכל התמונות הן מסוג 1 - אפשר לשנות לפי הצורך
-                    Size = 0, // גודל הקובץ לא ידוע כרגע, אפשר לעדכן אותו מאוחר יותר
-                    AlbumId = albumId,
-                    UserId = ownerId,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                };
+                //ImageUrl = $"https://my-buckets-testpnoren.s3.us-east-1.amazonaws.com/{fileName}",
 
 
-                await _imageService.AddImageAsync(image);
+
+                //string s3url = $"https://pictures-testpnoren.s3.amazonaws.com/{fileName}";
+
+                //// יצירת אובייקט תמונה ושמירה במסד הנתונים
+                //var image = new Image
+                //{
+                //    Name = fileName,
+                //    S3URL = s3url, // עדכון לכתובת המלאה
+                //    Type = 1, // נניח שכל התמונות הן מסוג 1 - אפשר לשנות לפי הצורך
+                //    Size = 0, // גודל הקובץ לא ידוע כרגע, אפשר לעדכן אותו מאוחר יותר
+                //    AlbumId = albumId,
+                //    UserId = ownerId,
+                //    CreatedAt = DateTime.UtcNow,
+                //    UpdatedAt = DateTime.UtcNow,
+                //};
+
+
+                //await _imageService.AddImageAsync(image);
 
                 return Ok(new { url });
             }

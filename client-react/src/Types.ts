@@ -3,21 +3,25 @@ export type User = {
     name: string,
     email: string,
     password: string,
-    phone: string
+    phone: string,
+    isConnected: boolean
 };
 export type Image = {
     id: number,
     name: string,
     s3URL: string
+    albumId: number,
+    ownerId: number,
 }
 export type Action = {
-    type: 'CREATE' | 'UPDATE' | 'DELETE',
+    type: 'CREATE' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'LOGOUT',
     data: Partial<User>
 }
 export type Album = {
     id: number,
     name: string,
-    images: Image[]
+    images: Image[],
+    userId: number
 }
 export type ImageAction =
     | { type: 'SET_IMAGES'; payload: Image[] }
@@ -29,4 +33,4 @@ export type AlbumAction =
     | { type: 'SET_ALBUMS'; payload: Album[] }
     | { type: 'CREATE_ALBUM'; payload: Album }
     | { type: 'UPDATE_ALBUM'; payload: Partial<Album> & { id: number } }
-    | { type: 'DELETE_ALBUM'; payload: { id: number } };    
+    | { type: 'DELETE_ALBUM'; payload: { albumId: number } };    

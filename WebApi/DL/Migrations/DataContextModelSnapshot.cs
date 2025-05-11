@@ -43,7 +43,7 @@ namespace DL.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -137,7 +137,9 @@ namespace DL.Migrations
                 {
                     b.HasOne("DL.Entities.User", null)
                         .WithMany("Albums")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DL.Entities.Image", b =>

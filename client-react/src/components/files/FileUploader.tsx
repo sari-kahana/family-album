@@ -65,7 +65,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import MyGallery from "./MyGallery";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const FileUploader = () => {
 
@@ -74,6 +74,7 @@ const FileUploader = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -109,9 +110,19 @@ const FileUploader = () => {
         },
       });
 
+      // שלב 3: עדכון המידע על התמונה בשרת (אם נדרש)
+      await axios.post('https://localhost:7263/api/Image', {
+        name: file.name,
+        s3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
+        albumId: albumId, // שלח את מזהה האלבום
+        ownerId: Number(localStorage.getItem('userId')) ?? undefined // שלח את מזהה המשתמש
+      });
+
       alert("הקובץ הועלה בהצלחה!");
       setProgress(0);
       setFile(null);
+      navigate(`/albums/${albumId}`); // חזור לאלבום לאחר ההעלאה
+
 
     } catch (error) {
       console.error("שגיאה בהעלאה:", error);

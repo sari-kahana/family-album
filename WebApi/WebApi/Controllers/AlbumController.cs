@@ -1,10 +1,13 @@
 ﻿using BL.InterfacesServices;
 using DL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlbumController : ControllerBase
@@ -22,7 +25,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var albums = await _albumService.GetAllAlbumsAsync();
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var albums = await _albumService.GetAllAlbumsAsync(userId);
                 return Ok(albums);
             }
             catch (Exception ex)
@@ -68,16 +72,16 @@ namespace WebApi.Controllers
 
         // PUT: api/album/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAlbum(int id, [FromBody] Album album)
+        public async Task<IActionResult> UpdateAlbum(int id, [FromBody] string albumName)
         {
-            if (album == null || id != album.Id)
-            {
-                return BadRequest("Album data is invalid");
-            }
+            //if (album == null || id != album.Id)
+            //{
+            //    return BadRequest("Album data is invalid");
+            //}
 
             try
             {
-                var updatedAlbum = await _albumService.UpdateAlbumAsync(id, album);
+                var updatedAlbum = await _albumService.UpdateAlbumAsync(id, albumName);
                 return Ok(updatedAlbum);
             }
             catch (Exception ex)

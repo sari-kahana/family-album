@@ -27,31 +27,50 @@ namespace BL.Services
 
         public async Task<Album> GetAlbumByIdAsync(int id)
         {
-            var album = await _dataContext.Albums.Include(a=>a.Images).FirstOrDefaultAsync(a => a.Id == id);
+            var album = await _dataContext.Albums.Include(a=>a.Images.Where(img => !img.IsDeleted)).FirstOrDefaultAsync(a => a.Id == id);
             if (album == null)
                 throw new Exception("album not found");
             return album;
         }
 
-        public async Task<List<Album>> GetAllAlbumsAsync()
+        public async Task<List<Album>> GetAllAlbumsAsync(int userId)
         {
-            return await _dataContext.Albums.ToListAsync();
+            return await _dataContext.Albums.Where(a=> a.UserId==userId && !a.IsDeleted).Include(a => a.Images.Where(img => !img.IsDeleted)).ToListAsync();
         }
 
-        public Task<Album> RemoveAlbumAsync(int id)
+        public async Task<Album> RemoveAlbumAsync(int id)
         {
-            var albumToRemove = GetAlbumByIdAsync(id);
-            _dataContext.Albums.Remove(albumToRemove.Result);
+            var albumToRemove = await GetAlbumByIdAsync(id);
+            albumToRemove.IsDeleted = true;
+            await _dataContext.SaveChangesAsync();
             return albumToRemove;
         }
 
-        public Task<Album> UpdateAlbumAsync(int id, Album album)
+        //public Task<Album> UpdateAlbumAsync(int id, string albumName)
+        //{
+        //    var albumToUpdate = GetAlbumByIdAsync(id);
+        //    albumToUpdate.Result.Name = albumName;
+        //    albumToUpdate.Result.UpdatedAt = DateTime.Now;
+        //    _dataContext.Albums.Update(albumToUpdate.Result);
+        //    return albumToUpdate;
+        //}
+
+        public async Task<Album> UpdateAlbumAsync(int id, string albumName)
         {
-            var albumToUpdate = GetAlbumByIdAsync(id);
-            albumToUpdate.Result.Name = album.Name;
-            albumToUpdate.Result.UpdatedAt = DateTime.Now;
-            _dataContext.Albums.Update(albumToUpdate.Result);
+            var albumToUpdate = await GetAlbumByIdAsync(id);
+            if (albumToUpdate == null)
+            {
+                throw new Exception("Album not found");
+            }
+
+            albumToUpdate.Name = albumName;
+            albumToUpdate.UpdatedAt = DateTime.Now;
+
+            _dataContext.Albums.Update(albumToUpdate);
+            await _dataContext.SaveChangesAsync();
+
             return albumToUpdate;
         }
+
     }
 }
