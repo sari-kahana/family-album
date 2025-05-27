@@ -15,6 +15,7 @@ namespace DL.Entities
         public string S3URL { get; set; }
         public int AlbumId { get; set; }
         public int UserId { get; set; }
+        public string? Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; }
@@ -27,6 +28,7 @@ namespace DL.Entities
             Type = type;
             Size = size;
             S3URL = s3url;
+            //Description = description;
             AlbumId = albumId;
             UserId = userId;
             IsDeleted = isDeleted;

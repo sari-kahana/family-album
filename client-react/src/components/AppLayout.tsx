@@ -1,8 +1,10 @@
-import { AppBar, Box, Button, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
 import Login from "./user/Login";
 import Register from "./user/Register";
 import { Link } from "react-router-dom";
 import { navStyle } from "./Style";
+import { Home } from "@mui/icons-material";
+import SearchImages from "./files/SearchImages";
 
 const AppLayout = () => {
 
@@ -11,9 +13,10 @@ const AppLayout = () => {
       <Box style={navStyle} sx={{ display: "flex", gap: 3 }}>
         <Login /> 
         <Register /> 
-        {/* <Button component={Link} to="MyGallery">My Gallery</Button>  */}
-        {/* <Button component={Link} to="upload">Upload Image</Button>  */}
-        {/* <Button component={Link} to="albums">My Gallery</Button>  */}
+        <Link to="/">
+        <IconButton color="primary"><Home/></IconButton>
+        </Link>
+        <SearchImages />
       </Box>
     </>
   );

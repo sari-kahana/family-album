@@ -295,3 +295,6 @@ C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\We
 C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\AWSSDK.Core.dll
 C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\AWSSDK.S3.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\DotNetEnv.dll
+C:\Users\שרי כהנא\Desktop\תכנות\שנה ב\פרקטיקום\WebApi\WebApi\bin\Debug\net8.0\Sprache.dll

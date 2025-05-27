@@ -255,6 +255,27 @@
         }
       }
     },
+    "/api/Image/search": {
+      "get": {
+        "tags": [
+          "Image"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/upload/presigned-url": {
       "get": {
         "tags": [
@@ -560,6 +581,10 @@
           "userId": {
             "type": "integer",
             "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           },
           "createdAt": {
             "type": "string",

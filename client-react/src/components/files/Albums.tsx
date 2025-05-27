@@ -179,6 +179,14 @@ const Albums = () => {
         >
           אלבום חדש
         </Button>
+        <Modal open={open} onClose={() => { setOpen(false) }}>
+              <Box sx={styleForm}>
+                   <form onSubmit={handleCreate}>
+                       <TextField label="Name" required={true} inputRef={albumName} />
+                       <Button variant="outlined" color='primary' type="submit">send</Button>
+                   </form>
+               </Box>
+          </Modal>
       <Grid container spacing={3} justifyContent="center">
         {albums.map((album, index) => (
           <Grow

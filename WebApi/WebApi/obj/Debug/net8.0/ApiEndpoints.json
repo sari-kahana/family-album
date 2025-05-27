@@ -158,6 +158,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "SearchImages",
+    "RelativePath": "api/Image/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApi.Controllers.UploadController",
     "Method": "GetPresignedUrl",
     "RelativePath": "api/upload/presigned-url",

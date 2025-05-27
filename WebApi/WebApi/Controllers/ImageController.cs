@@ -2,6 +2,8 @@
 using DL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace WebApi.Controllers
 {
@@ -69,6 +71,19 @@ namespace WebApi.Controllers
                 return NotFound(new { message = "Image not found" });
 
             return Ok(new { message = "Image deleted successfully", deletedImage });
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchImages([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("יש להזין טקסט לחיפוש");
+
+            var cleaned = Regex.Replace(query.ToLower(), @"[^\w\s]", "");
+
+            var images = await _imageService.SearchImagesAsync(cleaned);
+
+            return Ok(images);
         }
 
     }

@@ -113,7 +113,7 @@ const FileUploader = () => {
       // שלב 3: עדכון המידע על התמונה בשרת (אם נדרש)
       await axios.post('https://localhost:7263/api/Image', {
         name: file.name,
-        s3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
+        S3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
         albumId: albumId, // שלח את מזהה האלבום
         ownerId: Number(localStorage.getItem('userId')) ?? undefined // שלח את מזהה המשתמש
       });
