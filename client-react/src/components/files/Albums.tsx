@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useReducer, useRef, useState } from "react";
-import axios from "axios";
 import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer";
 import { Album } from "../../Types";
 import { Avatar, Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Fade, Grid, Grow, IconButton, Modal, TextField, Typography } from "@mui/material";
 import { Update, Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, PhotoLibrary as PhotoLibraryIcon } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { styleForm } from "../Style";
+import axiosInstance from "../axiosInstance";
 
 const Albums = () => {
 
@@ -23,7 +23,7 @@ const Albums = () => {
 
   const loadAlbums = async () => {
     try {
-      const response = await axios.get('https://localhost:7263/api/album', {
+      const response = await axiosInstance.get('/album', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -45,7 +45,7 @@ const Albums = () => {
 
   const handleDelete = async (albumId: number) => {
     try {
-      const response = await axios.delete(`https://localhost:7263/api/album/${albumId}`, {
+      const response = await axiosInstance.delete(`/album/${albumId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -62,7 +62,7 @@ const Albums = () => {
 
     e.preventDefault();
     try {
-      const response = await axios.put(`https://localhost:7263/api/album/${albumId}`,
+      const response = await axiosInstance.put(`/album/${albumId}`,
         albumName.current?.value || "undefined",
         {
           headers: {
@@ -91,7 +91,7 @@ const Albums = () => {
     };
 
     try {
-      const response = await axios.post('https://localhost:7263/api/album', newAlbum,
+      const response = await axiosInstance.post('/album', newAlbum,
         {
           headers: {
             Authorization: `Bearer ${token}`

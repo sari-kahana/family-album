@@ -1,14 +1,13 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { emptyUser, UserContext } from "./UserContext";
 import { Box, Button, Modal, TextField } from '@mui/material';
-import axios from 'axios';
 import Connected from "./Connected";
 import { styleForm } from "../Style";
+import axiosInstance from "../axiosInstance";
 // import Router from "../Router";
 // import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const url = 'https://localhost:7263/api/user'
   const { user, dispatch } = useContext(UserContext)
   const [open, setOpen] = useState(false);
   // const [connected, setConnected] = useState(false);
@@ -23,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     let response: any = null
     try {
-      response = await axios.post(`${url}/login`, {
+      response = await axiosInstance.post(`User/login`, {
         Email: userEmail.current?.value,
         Password: userPassword.current?.value,
       });

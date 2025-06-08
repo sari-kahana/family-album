@@ -1,5 +1,4 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import axios from 'axios';
 import { imageReducer, initialImageState } from '../../components/files/ImageReducer';
 import { Image } from '../../Types';
 import {
@@ -14,6 +13,7 @@ import {
 } from "@mui/material";
 import { Update, Delete as DeleteIcon, Edit as EditIcon, CloudUpload, Collections, Image as ImageIcon, ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../axiosInstance';
 
 
 const MyGallery = () => {
@@ -38,7 +38,7 @@ const MyGallery = () => {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`https://localhost:7263/api/album/${albumId}`,
+      const response = await axiosInstance.get(`/album/${albumId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -69,7 +69,7 @@ const MyGallery = () => {
     if (!selectedFile || selectedImageId === null) return;
 
     try {
-      const response = await axios.get('https://localhost:7263/api/upload/presigned-url', {
+      const response = await axiosInstance.get('/upload/presigned-url', {
         params: {
           fileName: selectedFile.name,
           albumId: albumId, // שלח את מזהה האלבום יחד עם שם הקובץ
@@ -81,7 +81,7 @@ const MyGallery = () => {
 
       const presignedUrl = response.data.url;
 
-      await axios.put(presignedUrl, selectedFile, {
+      await axiosInstance.put(presignedUrl, selectedFile, {
         headers: {
           'Content-Type': selectedFile.type,
         },
@@ -110,7 +110,7 @@ const MyGallery = () => {
       };
       
 
-      const { data: updatedImageFromServer } = await axios.put(`https://localhost:7263/api/image/${selectedImageId}`, updatedImage);
+      const { data: updatedImageFromServer } = await axiosInstance.put(`/image/${selectedImageId}`, updatedImage);
       dispatch({ type: 'UPDATE_IMAGE', payload: updatedImageFromServer });
       // dispatch({ type: 'UPDATE_IMAGE', payload: updatedImage });
       alert('התמונה עודכנה בהצלחה!');
@@ -121,7 +121,7 @@ const MyGallery = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`https://localhost:7263/api/image/${id}`);
+      await axiosInstance.delete(`/image/${id}`);
       dispatch({ type: 'DELETE_IMAGE', payload: { id } });
       alert('התמונה נמחקה בהצלחה!');
     } catch (error) {
@@ -142,7 +142,7 @@ const MyGallery = () => {
 
   const getAlbumName = async () => {
     try{
-      const response = await axios.get(`https://localhost:7263/api/album/${albumId}`, {
+      const response = await axiosInstance.get(`/album/${albumId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }});

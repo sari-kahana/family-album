@@ -1,6 +1,4 @@
 // import React, { useState } from 'react';
-// import axios from 'axios';
-
 // const FileUploader = () => {
 //   const [file, setFile] = useState<File | null>(null);
 //   const [progress, setProgress] = useState(0);
@@ -16,14 +14,14 @@
 
 //     try {
 //       // שלב 1: קבלת Presigned URL מהשרת
-//       const response = await axios.get('https://localhost:7263/api/upload/presigned-url', {
+//       const response = await axiosInstance.get('/upload/presigned-url', {
 //         params: { fileName: file.name }
 //       });
 
 //       const presignedUrl = response.data.url;
 
 //       // שלב 2: העלאת הקובץ ישירות ל-S3
-//       await axios.put(presignedUrl, file, {
+//       await axiosInstance.put(presignedUrl, file, {
 //         headers: {
 //           'Content-Type': file.type,
 //         },
@@ -53,7 +51,6 @@
 // export default FileUploader;
 
 import React, { useState } from "react";
-import axios from "axios";
 import {
   Box,
   Button,
@@ -64,8 +61,8 @@ import {
   CardActions,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import MyGallery from "./MyGallery";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
 
 const FileUploader = () => {
 
@@ -87,8 +84,8 @@ const FileUploader = () => {
 
     try {
       // שלב 1: קבלת Presigned URL מהשרת
-      const response = await axios.get(
-        "https://localhost:7263/api/upload/presigned-url",
+      const response = await axiosInstance.get(
+        "/upload/presigned-url",
         {
           params: {
             fileName: file.name,
@@ -100,7 +97,7 @@ const FileUploader = () => {
       const presignedUrl = response.data.url;
 
       // שלב 2: העלאת הקובץ ישירות ל-S3
-      await axios.put(presignedUrl, file, {
+      await axiosInstance.put(presignedUrl, file, {
         headers: { "Content-Type": file.type },
         onUploadProgress: (progressEvent) => {
           const percent = Math.round(
@@ -111,7 +108,7 @@ const FileUploader = () => {
       });
 
       // שלב 3: עדכון המידע על התמונה בשרת (אם נדרש)
-      await axios.post('https://localhost:7263/api/Image', {
+      await axiosInstance.post('/Image', {
         name: file.name,
         S3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
         albumId: albumId, // שלח את מזהה האלבום

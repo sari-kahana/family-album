@@ -1,12 +1,11 @@
 import { FormEvent, use, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Box, Button, Modal, TextField } from '@mui/material';
-import axios from 'axios';
 import NameAvatar from "./Connected";
 import { styleForm } from "../Style";
+import axiosInstance from "../axiosInstance";
 
 const Register = () => {
-  const url = 'https://localhost:7263/api/user'
   const { dispatch } = useContext(UserContext)
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -23,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     let response: any = null
     try {
-      response = await axios.post(`${url}`, {
+      response = await axiosInstance.post(`/User`, {
         name: userName.current?.value,
         email: userEmail.current?.value,
         password: userPassword.current?.value,

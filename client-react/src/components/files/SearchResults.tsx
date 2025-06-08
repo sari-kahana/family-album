@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { Image } from '../../Types';
+import axiosInstance from '../axiosInstance';
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams();
@@ -16,7 +16,7 @@ const SearchResults = () => {
 
     const fetchResults = async () => {
         try {
-            const response = await axios.get(`https://localhost:7263/api/Image/search?query=${encodeURIComponent(query || '')}`);
+            const response = await axiosInstance.get(`/Image/search?query=${encodeURIComponent(query || '')}`);
             setResults(response.data);
         } catch (error) {
             console.error('Search error:', error);
