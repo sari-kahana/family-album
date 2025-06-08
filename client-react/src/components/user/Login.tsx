@@ -24,8 +24,8 @@ const Login = () => {
     let response: any = null
     try {
       response = await axios.post(`${url}/login`, {
-        email: userEmail.current?.value,
-        password: userPassword.current?.value,
+        Email: userEmail.current?.value,
+        Password: userPassword.current?.value,
       });
       console.log('Response from server:', response.data);
       dispatch({ type: 'UPDATE', data: response.data.user })
