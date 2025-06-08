@@ -1,6 +1,5 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { CameraAlt } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   return (

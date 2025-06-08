@@ -1,4 +1,4 @@
-import { FormEvent, use, useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Box, Button, Modal, TextField } from '@mui/material';
 import NameAvatar from "./Connected";
@@ -9,7 +9,7 @@ const Register = () => {
   const { dispatch } = useContext(UserContext)
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [, setOpenSnackbar] = useState(false);
 
   const userPassword = useRef<HTMLInputElement>(null);
   const userEmail = useRef<HTMLInputElement>(null);

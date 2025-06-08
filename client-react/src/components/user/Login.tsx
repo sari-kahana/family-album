@@ -1,5 +1,5 @@
 import { FormEvent, useContext, useRef, useState } from "react";
-import { emptyUser, UserContext } from "./UserContext";
+import {  UserContext } from "./UserContext";
 import { Box, Button, Modal, TextField } from '@mui/material';
 import Connected from "./Connected";
 import { styleForm } from "../Style";
@@ -11,7 +11,7 @@ const Login = () => {
   const { user, dispatch } = useContext(UserContext)
   const [open, setOpen] = useState(false);
   // const [connected, setConnected] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [, setOpenSnackbar] = useState(false);
   // const navigate = useNavigate();
 
   const userPassword = useRef<HTMLInputElement>(null);

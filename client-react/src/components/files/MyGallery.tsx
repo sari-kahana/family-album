@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useState } from 'react';
 import { imageReducer, initialImageState } from '../../components/files/ImageReducer';
 import { Image } from '../../Types';
 import {
-  Box, Button, LinearProgress, Typography, Card, CardContent, CardActions, IconButton, CardHeader,
+  Box, Button, LinearProgress, Typography, Card, CardContent, CardActions, IconButton,
   Grid, Modal,
   Container,
   Breadcrumbs,
@@ -11,7 +11,7 @@ import {
   CardMedia,
   Fade,
 } from "@mui/material";
-import { Update, Delete as DeleteIcon, Edit as EditIcon, CloudUpload, Collections, Image as ImageIcon, ArrowBack } from '@mui/icons-material';
+import { Delete as DeleteIcon, Edit as CloudUpload, Collections, Image as ImageIcon, ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
 

@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useReducer, useRef, useState } from "react";
 import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer";
 import { Album } from "../../Types";
-import { Avatar, Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Fade, Grid, Grow, IconButton, Modal, TextField, Typography } from "@mui/material";
-import { Update, Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, PhotoLibrary as PhotoLibraryIcon } from '@mui/icons-material';
+import { Avatar, Box, Button, Card, CardActionArea, CardContent, Container, Grid, Grow, IconButton, Modal, TextField, Typography } from "@mui/material";
+import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, PhotoLibrary as PhotoLibraryIcon } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { styleForm } from "../Style";
 import axiosInstance from "../axiosInstance";
@@ -10,9 +10,9 @@ import axiosInstance from "../axiosInstance";
 const Albums = () => {
 
   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState);
-  const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
+  const [, setSelectedAlbumId] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
-  const [openRename, setOpenRename] = useState(false);
+  const [, setOpenRename] = useState(false);
   const albumName = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -58,27 +58,27 @@ const Albums = () => {
     }
   }
 
-  const handleUpdate = async (e: FormEvent, albumId: number) => {
+  // const handleUpdate = async (e: FormEvent, albumId: number) => {
 
-    e.preventDefault();
-    try {
-      const response = await axiosInstance.put(`/album/${albumId}`,
-        albumName.current?.value || "undefined",
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      console.log('Album updated:', response.data);
-      dispatch({ type: 'UPDATE_ALBUM', payload: { id: albumId, name: albumName.current?.value || "undefined" } });
-      setOpenRename(false);
-    }
-    catch (error) {
-      console.error('Error updating album:', error);
-    }
-  }
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axiosInstance.put(`/album/${albumId}`,
+  //       albumName.current?.value || "undefined",
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       }
+  //     );
+  //     console.log('Album updated:', response.data);
+  //     dispatch({ type: 'UPDATE_ALBUM', payload: { id: albumId, name: albumName.current?.value || "undefined" } });
+  //     setOpenRename(false);
+  //   }
+  //   catch (error) {
+  //     console.error('Error updating album:', error);
+  //   }
+  // }
 
   const handleCreate = async (e: FormEvent) => {
 

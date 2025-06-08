@@ -32,7 +32,6 @@ import './App.css'
 import MyUserContext from './components/user/UserContext'
 import { RouterProvider } from 'react-router-dom'
 import Router from './components/Router'
-import HomePage from './components/HomePage'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './components/Theme';
 
