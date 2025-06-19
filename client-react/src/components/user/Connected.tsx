@@ -1190,17 +1190,12 @@ import {
   ListItemIcon,
   Divider,
   alpha,
-  useTheme,
-  Box,
-  InputBase, // Added InputBase
   Stack, // Added Stack
 } from "@mui/material"
 import {
   Logout as LogoutIcon,
   PhotoLibrary,
   Palette,
-  Home as HomeIcon, // Renamed to avoid conflict
-  Search as SearchIcon, // Added SearchIcon
 } from "@mui/icons-material"
 import type React from "react"
 import { useContext, useState } from "react"

@@ -712,7 +712,7 @@
 
 "use client"
 
-import { IconButton, AppBar, Toolbar, useTheme, Box, Stack, Typography, alpha } from "@mui/material"
+import { IconButton, AppBar, Toolbar, Box, Stack, Typography, alpha } from "@mui/material"
 import { Home, CameraAlt } from "@mui/icons-material"
 import { useContext } from "react"
 import { UserContext } from "./user/UserContext"
@@ -726,7 +726,6 @@ const AppLayout = () => {
   const { user } = useContext(UserContext)
 
   const darkPurple = "#581C87" // Your desired dark purple
-  const navItemColor = theme.palette.grey[700] // Dark grey for nav items from your theme
   const logoColor = theme.palette.mode === "dark" ? "white" : darkPurple
 
   return (
