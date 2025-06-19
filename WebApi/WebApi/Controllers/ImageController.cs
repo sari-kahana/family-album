@@ -3,6 +3,7 @@ using DL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace WebApi.Controllers
@@ -80,8 +81,9 @@ namespace WebApi.Controllers
                 return BadRequest("יש להזין טקסט לחיפוש");
 
             var cleaned = Regex.Replace(query.ToLower(), @"[^\w\s]", "");
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            var images = await _imageService.SearchImagesAsync(cleaned);
+            var images = await _imageService.SearchImagesAsync(cleaned , userId);
 
             return Ok(images);
         }

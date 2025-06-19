@@ -1,110 +1,110 @@
-import { FormEvent, useEffect, useReducer, useRef, useState } from "react";
-import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer";
-import { Album } from "../../Types";
-import { Avatar, Box, Button, Card, CardActionArea, CardContent, Container, Grid, Grow, IconButton, Modal, TextField, Typography } from "@mui/material";
-import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, PhotoLibrary as PhotoLibraryIcon } from '@mui/icons-material';
-import { useNavigate } from "react-router-dom";
-import { styleForm } from "../Style";
-import axiosInstance from "../axiosInstance";
+// import { FormEvent, useEffect, useReducer, useRef, useState } from "react";
+// import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer";
+// import { Album } from "../../Types";
+// import { Avatar, Box, Button, Card, CardActionArea, CardContent, Container, Grid, Grow, IconButton, Modal, TextField, Typography } from "@mui/material";
+// import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, PhotoLibrary as PhotoLibraryIcon } from '@mui/icons-material';
+// import { useNavigate } from "react-router-dom";
+// import { styleForm } from "../Style";
+// import axiosInstance from "../axiosInstance";
 
-const Albums = () => {
+// const Albums = () => {
 
-  const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState);
-  const [, setSelectedAlbumId] = useState<number | null>(null);
-  const [open, setOpen] = useState(false);
-  const [, setOpenRename] = useState(false);
-  const albumName = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+//   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState);
+//   const [, setSelectedAlbumId] = useState<number | null>(null);
+//   const [open, setOpen] = useState(false);
+//   const [, setOpenRename] = useState(false);
+//   const albumName = useRef<HTMLInputElement>(null);
+//   const navigate = useNavigate();
+//   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    loadAlbums();
-  }, []);
+//   useEffect(() => {
+//     loadAlbums();
+//   }, []);
 
-  const loadAlbums = async () => {
-    try {
-      const response = await axiosInstance.get('/album', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log('Response from server:', response.data);
+//   const loadAlbums = async () => {
+//     try {
+//       const response = await axiosInstance.get('/album', {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
+//       console.log('Response from server:', response.data);
 
-      const albumsData: Album[] = response.data;
-      dispatch({ type: 'SET_ALBUMS', payload: albumsData });
-    } catch (error) {
-      console.error('שגיאה בטעינת התמונות:', error);
-    }
+//       const albumsData: Album[] = response.data;
+//       dispatch({ type: 'SET_ALBUMS', payload: albumsData });
+//     } catch (error) {
+//       console.error('שגיאה בטעינת התמונות:', error);
+//     }
 
-  };
+//   };
 
-  const handleAlbumClick = (albumId: number) => {
-    setSelectedAlbumId(albumId);
-    navigate(`/albums/${albumId}`); // Navigate to the album details page or perform any other action
-  };
+//   const handleAlbumClick = (albumId: number) => {
+//     setSelectedAlbumId(albumId);
+//     navigate(`/albums/${albumId}`); // Navigate to the album details page or perform any other action
+//   };
 
-  const handleDelete = async (albumId: number) => {
-    try {
-      const response = await axiosInstance.delete(`/album/${albumId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log('Album deleted:', response.data);
-      alert('Album deleted:' + response.data.id);
-      dispatch({ type: 'DELETE_ALBUM', payload: { albumId } });
-    } catch (error) {
-      console.error('Error deleting album:', error);
-    }
-  }
+//   const handleDelete = async (albumId: number) => {
+//     try {
+//       const response = await axiosInstance.delete(`/album/${albumId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
+//       console.log('Album deleted:', response.data);
+//       alert('Album deleted:' + response.data.id);
+//       dispatch({ type: 'DELETE_ALBUM', payload: { albumId } });
+//     } catch (error) {
+//       console.error('Error deleting album:', error);
+//     }
+//   }
 
-  // const handleUpdate = async (e: FormEvent, albumId: number) => {
+//   // const handleUpdate = async (e: FormEvent, albumId: number) => {
 
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axiosInstance.put(`/album/${albumId}`,
-  //       albumName.current?.value || "undefined",
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       }
-  //     );
-  //     console.log('Album updated:', response.data);
-  //     dispatch({ type: 'UPDATE_ALBUM', payload: { id: albumId, name: albumName.current?.value || "undefined" } });
-  //     setOpenRename(false);
-  //   }
-  //   catch (error) {
-  //     console.error('Error updating album:', error);
+//   //   e.preventDefault();
+//   //   try {
+//   //     const response = await axiosInstance.put(`/album/${albumId}`,
+//   //       albumName.current?.value || "undefined",
+//   //       {
+//   //         headers: {
+//   //           'Content-Type': 'application/json',
+//   //           Authorization: `Bearer ${token}`
+//   //         }
+//   //       }
+//   //     );
+//   //     console.log('Album updated:', response.data);
+//   //     dispatch({ type: 'UPDATE_ALBUM', payload: { id: albumId, name: albumName.current?.value || "undefined" } });
+//   //     setOpenRename(false);
+//   //   }
+//   //   catch (error) {
+//   //     console.error('Error updating album:', error);
+//   //   }
+//   // }
+
+//   const handleCreate = async (e: FormEvent) => {
+
+//     e.preventDefault();
+
+//     const newAlbum: Partial<Album> = {
+//       name: albumName.current?.value || "undefined",
+//       images: [],
+//       userId: parseInt(localStorage.getItem('userId') || '0')
+//     };
+
+//     try {
+//       const response = await axiosInstance.post('/album', newAlbum,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           }
+//         }
+//       );
+//       console.log('Album created:', response.data);
+//       dispatch({ type: 'CREATE_ALBUM', payload: response.data });
+//       setOpen(false);
+//     } catch (error) {
+//       console.error('Error creating album:', error);
   //   }
   // }
-
-  const handleCreate = async (e: FormEvent) => {
-
-    e.preventDefault();
-
-    const newAlbum: Partial<Album> = {
-      name: albumName.current?.value || "undefined",
-      images: [],
-      userId: parseInt(localStorage.getItem('userId') || '0')
-    };
-
-    try {
-      const response = await axiosInstance.post('/album', newAlbum,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      console.log('Album created:', response.data);
-      dispatch({ type: 'CREATE_ALBUM', payload: response.data });
-      setOpen(false);
-    } catch (error) {
-      console.error('Error creating album:', error);
-    }
-  }
   // return (
   //     <>
   //         {!open && (<Button onClick={() => { setOpen(true) }}>Add Album</Button>)}
@@ -150,139 +150,2865 @@ const Albums = () => {
   // )
 
 
-  return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          גלריית האלבומים שלי
-        </Typography>
+//   return (
+//     <Container maxWidth="lg" sx={{ py: 5 }}>
+//       <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
+//         <Typography variant="h4" fontWeight="bold" color="primary">
+//           גלריית האלבומים שלי
+//         </Typography>
 
         
-      </Box>
-      <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<AddIcon />}
-          onClick={() => setOpen(true)}
-          sx={{
-            borderRadius: 8,
-            margin: 2,
-            px: 3,
-            py: 1.2,
-            boxShadow: 3,
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: 6,
-              transition: 'all 0.3s ease-in-out'
-            }
-          }}
-        >
-          אלבום חדש
-        </Button>
-        <Modal open={open} onClose={() => { setOpen(false) }}>
-              <Box sx={styleForm}>
-                   <form onSubmit={handleCreate}>
-                       <TextField label="Name" required={true} inputRef={albumName} />
-                       <Button variant="outlined" color='primary' type="submit">send</Button>
-                   </form>
-               </Box>
-          </Modal>
-      <Grid container spacing={3} justifyContent="center">
-        {albums.map((album, index) => (
-          <Grow
-            in={true}
-            timeout={300 * (index + 1)}
-            key={album.id}
+//       </Box>
+//       <Button
+//           variant="contained"
+//           color="secondary"
+//           startIcon={<AddIcon />}
+//           onClick={() => setOpen(true)}
+//           sx={{
+//             borderRadius: 8,
+//             margin: 2,
+//             px: 3,
+//             py: 1.2,
+//             boxShadow: 3,
+//             '&:hover': {
+//               transform: 'translateY(-2px)',
+//               boxShadow: 6,
+//               transition: 'all 0.3s ease-in-out'
+//             }
+//           }}
+//         >
+//           אלבום חדש
+//         </Button>
+//         <Modal open={open} onClose={() => { setOpen(false) }}>
+//               <Box sx={styleForm}>
+//                    <form onSubmit={handleCreate}>
+//                        <TextField label="Name" required={true} inputRef={albumName} />
+//                        <Button variant="outlined" color='primary' type="submit">send</Button>
+//                    </form>
+//                </Box>
+//           </Modal>
+//       <Grid container spacing={3} justifyContent="center">
+//         {albums.map((album, index) => (
+//           <Grow
+//             in={true}
+//             timeout={300 * (index + 1)}
+//             key={album.id}
+//           >
+//             <Grid item xs={12} sm={6} md={4} lg={3}>
+//               <Card
+//                 sx={{
+//                   m: 1,
+//                   boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+//                   borderRadius: 2,
+//                   display: "flex",
+//                   flexDirection: "column",
+//                   alignItems: "center",
+//                   cursor: "pointer",
+//                   height: "100%",
+//                   width: "100%",
+//                   // boxShadow: '0 8px 24px rgba(149, 157, 165, 0.2)',
+//                   transition: 'all 0.3s ease-in-out',
+//                   '&:hover': {
+//                     // transform: 'translateY(-8px)',
+//                     boxShadow: '0 16px 40px rgba(149, 157, 165, 0.3)',
+//                   }
+//                 }}
+//               >
+//                 <CardActionArea
+//                   onClick={() => handleAlbumClick(album.id)}
+//                   sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+//                 >
+//                   <Box
+//                     sx={{
+//                       height: 160,
+//                       display: 'flex',
+//                       alignItems: 'center',
+//                       justifyContent: 'center',
+//                     }}
+//                   >
+//                     <Avatar
+//                       sx={{
+//                         width: 90,
+//                         height: 90,
+//                         bgcolor: 'primary.main',
+//                       }}
+//                     >
+//                       <PhotoLibraryIcon sx={{ fontSize: 45 }} />
+//                     </Avatar>
+//                   </Box>
+//                   <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+//                     <Typography variant="h6" fontWeight="medium" sx={{ mb: 1 }}>
+//                       {album.name}
+//                     </Typography>
+//                     <Typography variant="body2" color="text.secondary">
+//                       {` תמונות : ${album.images.length} `}
+//                     </Typography>
+//                   </CardContent>
+//                 </CardActionArea>
+
+//                 <Box
+//                   sx={{
+//                     display: 'flex',
+//                     justifyContent: 'space-between',
+//                     p: 1,
+//                     bgcolor: 'rgba(0,0,0,0.02)'
+//                   }}
+//                 >
+//                   <Button
+//                     startIcon={<EditIcon />}
+//                     onClick={() => {
+//                       setSelectedAlbumId(album.id);
+//                       setOpenRename(true);
+//                     }}
+//                     size="small"
+//                     sx={{ color: 'text.secondary' }}
+//                   >
+//                     שינוי שם
+//                   </Button>
+//                   <IconButton
+//                     onClick={() => handleDelete(album.id)}
+//                     color="error"
+//                     size="small"
+//                   >
+//                     <DeleteIcon />
+//                   </IconButton>
+//                 </Box>
+//               </Card>
+//             </Grid>
+//           </Grow>
+//         ))}
+//       </Grid>
+//     </Container>
+//   );
+
+// }
+// export default Albums;
+
+// "use client"
+
+// import { type FormEvent, useEffect, useReducer, useRef, useState } from "react"
+// import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer"
+// import type { Album } from "../../Types"
+// import {
+//   Avatar,
+//   Box,
+//   Button,
+//   Card,
+//   CardActionArea,
+//   CardContent,
+//   Container,
+//   Grid,
+//   Grow,
+//   Modal,
+//   TextField,
+//   Typography,
+//   alpha,
+//   useTheme,
+//   Fade,
+//   Stack,
+//   Chip,
+//   Paper,
+//   CircularProgress,
+// } from "@mui/material"
+// import {
+//   Delete as DeleteIcon,
+//   Edit as EditIcon,
+//   Add as AddIcon,
+//   PhotoLibrary as PhotoLibraryIcon,
+//   Collections,
+//   Image as ImageIcon,
+//   Palette,
+//   AutoAwesome,
+// } from "@mui/icons-material"
+// import { useNavigate } from "react-router-dom"
+// import axiosInstance from "../axiosInstance"
+// import SearchImages from "../files/SearchImages"
+
+// const Albums = () => {
+//   const theme = useTheme()
+//   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState)
+//   const [, setSelectedAlbumId] = useState<number | null>(null)
+//   const [open, setOpen] = useState(false)
+//   const [, setOpenRename] = useState(false)
+//   const albumName = useRef<HTMLInputElement>(null)
+//   const navigate = useNavigate()
+//   const token = localStorage.getItem("token")
+//   const [loading, setLoading] = useState(true)
+
+//   useEffect(() => {
+//     loadAlbums()
+//   }, [])
+
+//   const loadAlbums = async () => {
+//     setLoading(true)
+//     try {
+//       const response = await axiosInstance.get("/album", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Response from server:", response.data)
+
+//       const albumsData: Album[] = response.data
+//       dispatch({ type: "SET_ALBUMS", payload: albumsData })
+//     } catch (error) {
+//       console.error("שגיאה בטעינת התמונות:", error)
+//     } finally {
+//       setLoading(false)
+//     }
+//   }
+
+//   const handleAlbumClick = (albumId: number) => {
+//     setSelectedAlbumId(albumId)
+//     navigate(`/albums/${albumId}`)
+//   }
+
+//   const handleDelete = async (albumId: number) => {
+//     try {
+//       const response = await axiosInstance.delete(`/album/${albumId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album deleted:", response.data)
+//       alert("Album deleted:" + response.data.id)
+//       dispatch({ type: "DELETE_ALBUM", payload: { albumId } })
+//     } catch (error) {
+//       console.error("Error deleting album:", error)
+//     }
+//   }
+
+//   const handleCreate = async (e: FormEvent) => {
+//     e.preventDefault()
+
+//     const newAlbum: Partial<Album> = {
+//       name: albumName.current?.value || "undefined",
+//       images: [],
+//       userId: Number.parseInt(localStorage.getItem("userId") || "0"),
+//     }
+
+//     try {
+//       const response = await axiosInstance.post("/album", newAlbum, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album created:", response.data)
+//       dispatch({ type: "CREATE_ALBUM", payload: response.data })
+//       setOpen(false)
+//     } catch (error) {
+//       console.error("Error creating album:", error)
+//     }
+//   }
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(
+//           theme.palette.secondary.main,
+//           0.05,
+//         )} 100%)`,
+//         pt: 16,
+//         pb: 6,
+//       }}
+//     >
+//       <Container maxWidth="xl">
+//         {/* Hero Header */}
+//         <Box sx={{ textAlign: "center", mb: 6 }}>
+//           <Typography
+//             variant="h2"
+//             sx={{
+//               fontWeight: 800,
+//               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               backgroundClip: "text",
+//               WebkitBackgroundClip: "text",
+//               WebkitTextFillColor: "transparent",
+//               mb: 2,
+//               fontSize: { xs: "2.5rem", md: "3.5rem" },
+//             }}
+//           >
+//             גלריית האלבומים שלי
+//           </Typography>
+//           <Typography
+//             variant="h6"
+//             sx={{
+//               color: theme.palette.text.secondary,
+//               maxWidth: 600,
+//               mx: "auto",
+//               mb: 4,
+//             }}
+//           >
+//             ארגן את התמונות שלך באלבומים מותאמים אישית וצור זיכרונות בלתי נשכחים
+//           </Typography>
+
+//           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 4 }}>
+//             <SearchImages />
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 fontSize: "1.1rem",
+//                 fontWeight: 600,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                 boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+//                 "&:hover": {
+//                   transform: "translateY(-3px)",
+//                   boxShadow: "0 12px 35px rgba(102, 126, 234, 0.6)",
+//                 },
+//                 transition: "all 0.3s ease",
+//               }}
+//             >
+//               יצירת אלבום חדש
+//             </Button>
+//           </Box>
+//         </Box>
+
+//         {/* Stats Cards */}
+//         <Grid container spacing={3} sx={{ mb: 6 }}>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(
+//                   theme.palette.primary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//               }}
+//             >
+//               <Collections sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, lineHeight: 1 }}>
+//                   {albums.length}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   אלבומים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.secondary.main, 0.1)}, ${alpha(
+//                   theme.palette.secondary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.secondary.main, 0.1)}`,
+//               }}
+//             >
+//               <ImageIcon sx={{ fontSize: 32, color: theme.palette.secondary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.secondary.main, lineHeight: 1 }}>
+//                   {albums.reduce((total, album) => total + album.images.length, 0)}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תמונות
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)}, ${alpha(
+//                   theme.palette.info.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+//               }}
+//             >
+//               <Palette sx={{ fontSize: 32, color: theme.palette.info.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.info.main, lineHeight: 1 }}>
+//                   0
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   קולאז'ים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)}, ${alpha(
+//                   theme.palette.success.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
+//               }}
+//             >
+//               <AutoAwesome sx={{ fontSize: 32, color: theme.palette.success.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.success.main, lineHeight: 1 }}>
+//                   AI
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תיאורים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//         </Grid>
+
+//         {/* Albums Grid */}
+//         {loading ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <CircularProgress
+//               size={60}
+//               sx={{
+//                 color: theme.palette.primary.main,
+//                 mb: 3,
+//               }}
+//             />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+//               טוען את האלבומים שלך...
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
+//               אנא המתן בזמן שאנחנו מביאים את האלבומים שלך
+//             </Typography>
+//           </Box>
+//         ) : albums.length === 0 ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <PhotoLibraryIcon sx={{ fontSize: 80, color: theme.palette.text.disabled, mb: 3 }} />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+//               עדיין אין לך אלבומים
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 4 }}>
+//               צור את האלבום הראשון שלך והתחל לארגן את התמונות שלך
+//             </Typography>
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               }}
+//             >
+//               יצירת האלבום הראשון
+//             </Button>
+//           </Box>
+//         ) : (
+//           <Grid container spacing={4}>
+//             {albums.map((album, index) => (
+//               <Grow in={true} timeout={300 * (index + 1)} key={album.id}>
+//                 <Grid item xs={12} sm={6} md={4} lg={3}>
+//                   <Card
+//                     sx={{
+//                       height: "100%",
+//                       borderRadius: 4,
+//                       overflow: "hidden",
+//                       background: "rgba(255, 255, 255, 0.9)",
+//                       backdropFilter: "blur(20px)",
+//                       border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+//                       "&:hover": {
+//                         transform: "translateY(-12px) scale(1.02)",
+//                         boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
+//                         "& .album-avatar": {
+//                           transform: "scale(1.1)",
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                         },
+//                         "& .album-actions": {
+//                           opacity: 1,
+//                           transform: "translateY(0)",
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <CardActionArea onClick={() => handleAlbumClick(album.id)} sx={{ height: "100%" }}>
+//                       <Box
+//                         sx={{
+//                           height: 200,
+//                           display: "flex",
+//                           flexDirection: "column",
+//                           alignItems: "center",
+//                           justifyContent: "center",
+//                           background:
+//                             album.images.length > 0 && album.images[0]?.s3URL
+//                               ? `url(${album.images[0].s3URL}) center/cover`
+//                               : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(
+//                                   theme.palette.secondary.main,
+//                                   0.05,
+//                                 )})`,
+//                           position: "relative",
+//                           overflow: "hidden",
+//                           "&::before": {
+//                             content: '""',
+//                             position: "absolute",
+//                             top: 0,
+//                             left: 0,
+//                             right: 0,
+//                             bottom: 0,
+//                             background:
+//                               album.images.length > 0
+//                                 ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
+//                                 : `radial-gradient(circle at 30% 70%, ${alpha(
+//                                     theme.palette.primary.main,
+//                                     0.1,
+//                                   )} 0%, transparent 50%)`,
+//                           },
+//                         }}
+//                       >
+//                         {album.images.length === 0 && (
+//                           <Avatar
+//                             className="album-avatar"
+//                             sx={{
+//                               width: 80,
+//                               height: 80,
+//                               bgcolor: alpha(theme.palette.primary.main, 0.1),
+//                               color: theme.palette.primary.main,
+//                               transition: "all 0.3s ease",
+//                               border: `3px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+//                               mb: 2,
+//                               zIndex: 1,
+//                             }}
+//                           >
+//                             <PhotoLibraryIcon sx={{ fontSize: 35 }} />
+//                           </Avatar>
+//                         )}
+
+//                         <Chip
+//                           label={`${album.images.length} תמונות`}
+//                           size="small"
+//                           sx={{
+//                             backgroundColor: alpha(theme.palette.background.paper, 0.9),
+//                             color: theme.palette.primary.main,
+//                             fontWeight: 600,
+//                             zIndex: 1,
+//                           }}
+//                         />
+//                       </Box>
+
+//                       <CardContent sx={{ p: 3, textAlign: "center" }}>
+//                         <Typography
+//                           variant="h6"
+//                           sx={{
+//                             fontWeight: 700,
+//                             mb: 1,
+//                             color: theme.palette.text.primary,
+//                             overflow: "hidden",
+//                             textOverflow: "ellipsis",
+//                             whiteSpace: "nowrap",
+//                           }}
+//                         >
+//                           {album.name}
+//                         </Typography>
+//                         <Typography variant="body2" color="text.secondary">
+//                           נוצר לאחרונה
+//                         </Typography>
+//                       </CardContent>
+//                     </CardActionArea>
+
+//                     <Box
+//                       className="album-actions"
+//                       sx={{
+//                         position: "absolute",
+//                         bottom: 0,
+//                         left: 0,
+//                         right: 0,
+//                         p: 2,
+//                         background: `linear-gradient(to top, ${alpha(theme.palette.background.paper, 0.95)}, transparent)`,
+//                         backdropFilter: "blur(10px)",
+//                         display: "flex",
+//                         justifyContent: "space-between",
+//                         opacity: 0,
+//                         transform: "translateY(10px)",
+//                         transition: "all 0.3s ease",
+//                       }}
+//                     >
+//                       <Button
+//                         startIcon={<EditIcon />}
+//                         size="small"
+//                         variant="contained"
+//                         onClick={(e) => {
+//                           e.stopPropagation()
+//                           setSelectedAlbumId(album.id)
+//                           setOpenRename(true)
+//                         }}
+//                         sx={{
+//                           borderRadius: 3,
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                           color: "white",
+//                           px: 2,
+//                           fontSize: "0.75rem",
+//                           "&:hover": {
+//                             transform: "translateY(-2px)",
+//                             boxShadow: "0 8px 20px rgba(102, 126, 234, 0.4)",
+//                           },
+//                         }}
+//                       >
+//                         עריכה
+//                       </Button>
+//                       <Button
+//                         startIcon={<DeleteIcon />}
+//                         size="small"
+//                         variant="contained"
+//                         color="error"
+//                         onClick={(e) => {
+//                           e.stopPropagation()
+//                           handleDelete(album.id)
+//                         }}
+//                         sx={{
+//                           borderRadius: 3,
+//                           px: 2,
+//                           fontSize: "0.75rem",
+//                           "&:hover": {
+//                             transform: "translateY(-2px)",
+//                             boxShadow: "0 8px 20px rgba(244, 67, 54, 0.4)",
+//                           },
+//                         }}
+//                       >
+//                         מחק
+//                       </Button>
+//                     </Box>
+//                   </Card>
+//                 </Grid>
+//               </Grow>
+//             ))}
+//           </Grid>
+//         )}
+
+//         {/* Create Album Modal */}
+//         <Modal open={open} onClose={() => setOpen(false)} closeAfterTransition>
+//           <Fade in={open}>
+//             <Box
+//               sx={{
+//                 position: "absolute",
+//                 top: "50%",
+//                 left: "50%",
+//                 transform: "translate(-50%, -50%)",
+//                 width: { xs: "90%", sm: 500 },
+//                 background: "rgba(255, 255, 255, 0.95)",
+//                 backdropFilter: "blur(20px)",
+//                 borderRadius: 4,
+//                 boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                 p: 4,
+//               }}
+//             >
+//               <Typography
+//                 variant="h5"
+//                 sx={{
+//                   fontWeight: 700,
+//                   textAlign: "center",
+//                   mb: 3,
+//                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                   backgroundClip: "text",
+//                   WebkitBackgroundClip: "text",
+//                   WebkitTextFillColor: "transparent",
+//                 }}
+//               >
+//                 יצירת אלבום חדש
+//               </Typography>
+
+//               <form onSubmit={handleCreate}>
+//                 <Stack spacing={3}>
+//                   <TextField
+//                     label="שם האלבום"
+//                     required
+//                     inputRef={albumName}
+//                     fullWidth
+//                     variant="outlined"
+//                     sx={{
+//                       "& .MuiOutlinedInput-root": {
+//                         borderRadius: 2,
+//                         backgroundColor: alpha(theme.palette.primary.main, 0.02),
+//                       },
+//                     }}
+//                   />
+
+//                   <Stack direction="row" spacing={2} justifyContent="center">
+//                     <Button
+//                       variant="outlined"
+//                       onClick={() => setOpen(false)}
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         borderColor: alpha(theme.palette.primary.main, 0.3),
+//                       }}
+//                     >
+//                       ביטול
+//                     </Button>
+//                     <Button
+//                       variant="contained"
+//                       type="submit"
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                         "&:hover": {
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+//                         },
+//                       }}
+//                     >
+//                       יצירת אלבום
+//                     </Button>
+//                   </Stack>
+//                 </Stack>
+//               </form>
+//             </Box>
+//           </Fade>
+//         </Modal>
+//       </Container>
+//     </Box>
+//   )
+// }
+// export default Albums
+
+
+// "use client"
+
+// import { type FormEvent, useEffect, useReducer, useRef, useState } from "react"
+// import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer"
+// import type { Album } from "../../Types"
+// import {
+//   Avatar,
+//   Box,
+//   Button,
+//   Card,
+//   CardActionArea,
+//   CardContent,
+//   Container,
+//   Grid,
+//   Grow,
+//   Modal,
+//   TextField,
+//   Typography,
+//   alpha,
+//   useTheme,
+//   Fade,
+//   Stack,
+//   Chip,
+//   Paper,
+//   CircularProgress,
+// } from "@mui/material"
+// import {
+//   Delete as DeleteIcon,
+//   Edit as EditIcon,
+//   Add as AddIcon,
+//   PhotoLibrary as PhotoLibraryIcon,
+//   Collections,
+//   Image as ImageIcon,
+//   Palette,
+//   AutoAwesome,
+// } from "@mui/icons-material"
+// import { useNavigate } from "react-router-dom"
+// import axiosInstance from "../axiosInstance"
+// import SearchImages from "../files/SearchImages"
+
+// const Albums = () => {
+//   const theme = useTheme()
+//   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState)
+//   const [, setSelectedAlbumId] = useState<number | null>(null)
+//   const [open, setOpen] = useState(false)
+//   const [, setOpenRename] = useState(false)
+//   const albumName = useRef<HTMLInputElement>(null)
+//   const navigate = useNavigate()
+//   const token = localStorage.getItem("token")
+//   const [loading, setLoading] = useState(true)
+
+//   useEffect(() => {
+//     loadAlbums()
+//   }, [])
+
+//   const loadAlbums = async () => {
+//     setLoading(true)
+//     try {
+//       const response = await axiosInstance.get("/album", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Response from server:", response.data)
+
+//       const albumsData: Album[] = response.data
+//       dispatch({ type: "SET_ALBUMS", payload: albumsData })
+//     } catch (error) {
+//       console.error("שגיאה בטעינת התמונות:", error)
+//     } finally {
+//       setLoading(false)
+//     }
+//   }
+
+//   const handleAlbumClick = (albumId: number) => {
+//     setSelectedAlbumId(albumId)
+//     navigate(`/albums/${albumId}`)
+//   }
+
+//   const handleDelete = async (albumId: number) => {
+//     try {
+//       const response = await axiosInstance.delete(`/album/${albumId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album deleted:", response.data)
+//       alert("Album deleted:" + response.data.id)
+//       dispatch({ type: "DELETE_ALBUM", payload: { albumId } })
+//     } catch (error) {
+//       console.error("Error deleting album:", error)
+//     }
+//   }
+
+//   const handleCreate = async (e: FormEvent) => {
+//     e.preventDefault()
+
+//     const newAlbum: Partial<Album> = {
+//       name: albumName.current?.value || "undefined",
+//       images: [],
+//       userId: Number.parseInt(localStorage.getItem("userId") || "0"),
+//     }
+
+//     try {
+//       const response = await axiosInstance.post("/album", newAlbum, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album created:", response.data)
+//       dispatch({ type: "CREATE_ALBUM", payload: response.data })
+//       setOpen(false)
+//     } catch (error) {
+//       console.error("Error creating album:", error)
+//     }
+//   }
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(
+//           theme.palette.secondary.main,
+//           0.05,
+//         )} 100%)`,
+//         pt: 16,
+//         pb: 6,
+//       }}
+//     >
+//       <Container maxWidth="xl">
+//         {/* Hero Header */}
+//         <Box sx={{ textAlign: "center", mb: 6 }}>
+//           <Typography
+//             variant="h2"
+//             sx={{
+//               fontWeight: 800,
+//               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               backgroundClip: "text",
+//               WebkitBackgroundClip: "text",
+//               WebkitTextFillColor: "transparent",
+//               mb: 2,
+//               fontSize: { xs: "2.5rem", md: "3.5rem" },
+//             }}
+//           >
+//             גלריית האלבומים שלי
+//           </Typography>
+//           <Typography
+//             variant="h6"
+//             sx={{
+//               color: theme.palette.text.secondary,
+//               maxWidth: 600,
+//               mx: "auto",
+//               mb: 4,
+//             }}
+//           >
+//             ארגן את התמונות שלך באלבומים מותאמים אישית וצור זיכרונות בלתי נשכחים
+//           </Typography>
+
+//           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 4 }}>
+//             <SearchImages />
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 fontSize: "1.1rem",
+//                 fontWeight: 600,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                 boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+//                 "&:hover": {
+//                   transform: "translateY(-3px)",
+//                   boxShadow: "0 12px 35px rgba(102, 126, 234, 0.6)",
+//                 },
+//                 transition: "all 0.3s ease",
+//               }}
+//             >
+//               יצירת אלבום חדש
+//             </Button>
+//           </Box>
+//         </Box>
+
+//         {/* Stats Cards */}
+//         <Grid container spacing={3} sx={{ mb: 6 }}>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(
+//                   theme.palette.primary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//               }}
+//             >
+//               <Collections sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, lineHeight: 1 }}>
+//                   {albums.length}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   אלבומים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.secondary.main, 0.1)}, ${alpha(
+//                   theme.palette.secondary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.secondary.main, 0.1)}`,
+//               }}
+//             >
+//               <ImageIcon sx={{ fontSize: 32, color: theme.palette.secondary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.secondary.main, lineHeight: 1 }}>
+//                   {albums.reduce((total, album) => total + album.images.length, 0)}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תמונות
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)}, ${alpha(
+//                   theme.palette.info.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+//               }}
+//             >
+//               <Palette sx={{ fontSize: 32, color: theme.palette.info.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.info.main, lineHeight: 1 }}>
+//                   0
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   קולאז'ים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)}, ${alpha(
+//                   theme.palette.success.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
+//               }}
+//             >
+//               <AutoAwesome sx={{ fontSize: 32, color: theme.palette.success.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.success.main, lineHeight: 1 }}>
+//                   AI
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תיאורים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//         </Grid>
+
+//         {/* Albums Grid */}
+//         {loading ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <CircularProgress
+//               size={60}
+//               sx={{
+//                 color: theme.palette.primary.main,
+//                 mb: 3,
+//               }}
+//             />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+//               טוען את האלבומים שלך...
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
+//               אנא המתן בזמן שאנחנו מביאים את האלבומים שלך
+//             </Typography>
+//           </Box>
+//         ) : albums.length === 0 ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <PhotoLibraryIcon sx={{ fontSize: 80, color: theme.palette.text.disabled, mb: 3 }} />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+//               עדיין אין לך אלבומים
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 4 }}>
+//               צור את האלבום הראשון שלך והתחל לארגן את התמונות שלך
+//             </Typography>
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               }}
+//             >
+//               יצירת האלבום הראשון
+//             </Button>
+//           </Box>
+//         ) : (
+//           <Grid container spacing={4} direction="row-reverse">
+//             {albums.map((album, index) => (
+//               <Grow in={true} timeout={300 * (index + 1)} key={album.id}>
+//                 <Grid item xs={12} sm={6} md={4} lg={3}>
+//                   <Card
+//                     sx={{
+//                       height: "100%",
+//                       borderRadius: 4,
+//                       overflow: "hidden",
+//                       background: "rgba(255, 255, 255, 0.9)",
+//                       backdropFilter: "blur(20px)",
+//                       border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+//                       "&:hover": {
+//                         transform: "translateY(-12px) scale(1.02)",
+//                         boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
+//                         "& .album-avatar": {
+//                           transform: "scale(1.1)",
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                         },
+//                         "& .album-actions": {
+//                           opacity: 1,
+//                           transform: "translateY(0)",
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <CardActionArea onClick={() => handleAlbumClick(album.id)} sx={{ height: "100%" }}>
+//                       <Box
+//                         sx={{
+//                           height: 200,
+//                           display: "flex",
+//                           flexDirection: "column",
+//                           alignItems: "center",
+//                           justifyContent: "center",
+//                           background:
+//                             album.images && album.images.length > 0 && album.images[0] && album.images[0].s3URL
+//                               ? `url(${album.images[0].s3URL}) center/cover`
+//                               : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(
+//                                   theme.palette.secondary.main,
+//                                   0.05,
+//                                 )})`,
+//                           position: "relative",
+//                           overflow: "hidden",
+//                           "&::before": {
+//                             content: '""',
+//                             position: "absolute",
+//                             top: 0,
+//                             left: 0,
+//                             right: 0,
+//                             bottom: 0,
+//                             background:
+//                               album.images.length > 0
+//                                 ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
+//                                 : `radial-gradient(circle at 30% 70%, ${alpha(
+//                                     theme.palette.primary.main,
+//                                     0.1,
+//                                   )} 0%, transparent 50%)`,
+//                           },
+//                         }}
+//                       >
+//                         {album.images.length === 0 && (
+//                           <Avatar
+//                             className="album-avatar"
+//                             sx={{
+//                               width: 80,
+//                               height: 80,
+//                               bgcolor: alpha(theme.palette.primary.main, 0.1),
+//                               color: theme.palette.primary.main,
+//                               transition: "all 0.3s ease",
+//                               border: `3px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+//                               mb: 2,
+//                               zIndex: 1,
+//                             }}
+//                           >
+//                             <PhotoLibraryIcon sx={{ fontSize: 35 }} />
+//                           </Avatar>
+//                         )}
+
+//                         <Chip
+//                           label={`${album.images.length} תמונות`}
+//                           size="small"
+//                           sx={{
+//                             backgroundColor: alpha(theme.palette.background.paper, 0.9),
+//                             color: theme.palette.primary.main,
+//                             fontWeight: 600,
+//                             zIndex: 1,
+//                           }}
+//                         />
+//                       </Box>
+
+//                       <CardContent sx={{ p: 3, textAlign: "center" }}>
+//                         <Typography
+//                           variant="h6"
+//                           sx={{
+//                             fontWeight: 700,
+//                             mb: 1,
+//                             color: theme.palette.text.primary,
+//                             overflow: "hidden",
+//                             textOverflow: "ellipsis",
+//                             whiteSpace: "nowrap",
+//                           }}
+//                         >
+//                           {album.name}
+//                         </Typography>
+//                         <Typography variant="body2" color="text.secondary">
+//                           נוצר לאחרונה
+//                         </Typography>
+//                       </CardContent>
+//                     </CardActionArea>
+
+//                     <Box
+//                       className="album-actions"
+//                       sx={{
+//                         position: "absolute",
+//                         bottom: 0,
+//                         left: 0,
+//                         right: 0,
+//                         p: 2,
+//                         background: `linear-gradient(to top, ${alpha(theme.palette.background.paper, 0.95)}, transparent)`,
+//                         backdropFilter: "blur(10px)",
+//                         display: "flex",
+//                         justifyContent: "space-between",
+//                         opacity: 0,
+//                         transform: "translateY(10px)",
+//                         transition: "all 0.3s ease",
+//                       }}
+//                     >
+//                       <Button
+//                         startIcon={<EditIcon />}
+//                         size="small"
+//                         variant="contained"
+//                         onClick={(e) => {
+//                           e.stopPropagation()
+//                           setSelectedAlbumId(album.id)
+//                           setOpenRename(true)
+//                         }}
+//                         sx={{
+//                           borderRadius: 3,
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                           color: "white",
+//                           px: 2,
+//                           fontSize: "0.75rem",
+//                           "&:hover": {
+//                             transform: "translateY(-2px)",
+//                             boxShadow: "0 8px 20px rgba(102, 126, 234, 0.4)",
+//                           },
+//                         }}
+//                       >
+//                         עריכה
+//                       </Button>
+//                       <Button
+//                         startIcon={<DeleteIcon />}
+//                         size="small"
+//                         variant="contained"
+//                         color="error"
+//                         onClick={(e) => {
+//                           e.stopPropagation()
+//                           handleDelete(album.id)
+//                         }}
+//                         sx={{
+//                           borderRadius: 3,
+//                           px: 2,
+//                           fontSize: "0.75rem",
+//                           "&:hover": {
+//                             transform: "translateY(-2px)",
+//                             boxShadow: "0 8px 20px rgba(244, 67, 54, 0.4)",
+//                           },
+//                         }}
+//                       >
+//                         מחק
+//                       </Button>
+//                     </Box>
+//                   </Card>
+//                 </Grid>
+//               </Grow>
+//             ))}
+//           </Grid>
+//         )}
+
+//         {/* Create Album Modal */}
+//         <Modal open={open} onClose={() => setOpen(false)} closeAfterTransition>
+//           <Fade in={open}>
+//             <Box
+//               sx={{
+//                 position: "absolute",
+//                 top: "50%",
+//                 left: "50%",
+//                 transform: "translate(-50%, -50%)",
+//                 width: { xs: "90%", sm: 500 },
+//                 background: "rgba(255, 255, 255, 0.95)",
+//                 backdropFilter: "blur(20px)",
+//                 borderRadius: 4,
+//                 boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                 p: 4,
+//               }}
+//             >
+//               <Typography
+//                 variant="h5"
+//                 sx={{
+//                   fontWeight: 700,
+//                   textAlign: "center",
+//                   mb: 3,
+//                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                   backgroundClip: "text",
+//                   WebkitBackgroundClip: "text",
+//                   WebkitTextFillColor: "transparent",
+//                 }}
+//               >
+//                 יצירת אלבום חדש
+//               </Typography>
+
+//               <form onSubmit={handleCreate}>
+//                 <Stack spacing={3}>
+//                   <TextField
+//                     label="שם האלבום"
+//                     required
+//                     inputRef={albumName}
+//                     fullWidth
+//                     variant="outlined"
+//                     sx={{
+//                       "& .MuiOutlinedInput-root": {
+//                         borderRadius: 2,
+//                         backgroundColor: alpha(theme.palette.primary.main, 0.02),
+//                       },
+//                     }}
+//                   />
+
+//                   <Stack direction="row" spacing={2} justifyContent="center">
+//                     <Button
+//                       variant="outlined"
+//                       onClick={() => setOpen(false)}
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         borderColor: alpha(theme.palette.primary.main, 0.3),
+//                       }}
+//                     >
+//                       ביטול
+//                     </Button>
+//                     <Button
+//                       variant="contained"
+//                       type="submit"
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                         "&:hover": {
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+//                         },
+//                       }}
+//                     >
+//                       יצירת אלבום
+//                     </Button>
+//                   </Stack>
+//                 </Stack>
+//               </form>
+//             </Box>
+//           </Fade>
+//         </Modal>
+//       </Container>
+//     </Box>
+//   )
+// }
+
+// export default Albums
+
+
+// "use client"
+
+// import { type FormEvent, useEffect, useReducer, useRef, useState } from "react"
+// import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer"
+// import type { Album } from "../../Types"
+// import {
+//   Avatar,
+//   Box,
+//   Button,
+//   Card,
+//   CardActionArea,
+//   CardContent,
+//   Container,
+//   Grid,
+//   Grow,
+//   Modal,
+//   TextField,
+//   Typography,
+//   alpha,
+//   useTheme,
+//   Fade,
+//   Stack,
+//   Chip,
+//   Paper,
+//   CircularProgress,
+// } from "@mui/material"
+// import {
+//   Delete as DeleteIcon,
+//   Edit as EditIcon,
+//   Add as AddIcon,
+//   PhotoLibrary as PhotoLibraryIcon,
+//   Collections,
+//   Image as ImageIcon,
+//   Palette,
+//   AutoAwesome,
+// } from "@mui/icons-material"
+// import { useNavigate } from "react-router-dom"
+// import axiosInstance from "../axiosInstance"
+// import SearchImages from "../files/SearchImages"
+
+// const Albums = () => {
+//   const theme = useTheme()
+//   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState)
+//   const [, setSelectedAlbumId] = useState<number | null>(null)
+//   const [open, setOpen] = useState(false)
+//   const [, setOpenRename] = useState(false)
+//   const albumName = useRef<HTMLInputElement>(null)
+//   const navigate = useNavigate()
+//   const token = localStorage.getItem("token")
+//   const [loading, setLoading] = useState(true)
+
+//   useEffect(() => {
+//     loadAlbums()
+//   }, [])
+
+//   const loadAlbums = async () => {
+//     setLoading(true)
+//     try {
+//       const response = await axiosInstance.get("/album", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Response from server:", response.data)
+
+//       const albumsData: Album[] = response.data
+//       dispatch({ type: "SET_ALBUMS", payload: albumsData })
+//     } catch (error) {
+//       console.error("שגיאה בטעינת התמונות:", error)
+//     } finally {
+//       setLoading(false)
+//     }
+//   }
+
+//   const handleAlbumClick = (albumId: number) => {
+//     setSelectedAlbumId(albumId)
+//     navigate(`/albums/${albumId}`)
+//   }
+
+//   const handleDelete = async (albumId: number) => {
+//     try {
+//       const response = await axiosInstance.delete(`/album/${albumId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album deleted:", response.data)
+//       alert("Album deleted:" + response.data.id)
+//       dispatch({ type: "DELETE_ALBUM", payload: { albumId } })
+//     } catch (error) {
+//       console.error("Error deleting album:", error)
+//     }
+//   }
+
+//   const handleCreate = async (e: FormEvent) => {
+//     e.preventDefault()
+
+//     const newAlbum: Partial<Album> = {
+//       name: albumName.current?.value || "undefined",
+//       images: [],
+//       userId: Number.parseInt(localStorage.getItem("userId") || "0"),
+//     }
+
+//     try {
+//       const response = await axiosInstance.post("/album", newAlbum, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       console.log("Album created:", response.data)
+//       dispatch({ type: "CREATE_ALBUM", payload: response.data })
+//       setOpen(false)
+//     } catch (error) {
+//       console.error("Error creating album:", error)
+//     }
+//   }
+
+//   // פונקציה לפורמט תאריך
+//   const formatDate = (dateString: string) => {
+//     try {
+//       const date = new Date(dateString)
+//       return date.toLocaleDateString("he-IL", {
+//         year: "numeric",
+//         month: "long",
+//         day: "numeric",
+//       })
+//     } catch (error) {
+//       return "תאריך לא זמין"
+//     }
+//   }
+
+//   // פונקציה לקבלת תמונת כיסוי
+//   const getCoverImage = (album: Album) => {
+//     if (album.images && album.images.length > 0) {
+//       // נחפש תמונה עם s3URL תקין
+//       const validImage = album.images.find((img) => img && img.s3URL && img.s3URL.trim() !== "")
+//       return validImage?.s3URL || null
+//     }
+//     return null
+//   }
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(
+//           theme.palette.secondary.main,
+//           0.05,
+//         )} 100%)`,
+//         pt: 16,
+//         pb: 6,
+//       }}
+//     >
+//       <Container maxWidth="xl">
+//         {/* Hero Header */}
+//         <Box sx={{ textAlign: "center", mb: 6 }}>
+//           <Typography
+//             variant="h2"
+//             sx={{
+//               fontWeight: 800,
+//               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               backgroundClip: "text",
+//               WebkitBackgroundClip: "text",
+//               WebkitTextFillColor: "transparent",
+//               mb: 2,
+//               fontSize: { xs: "2.5rem", md: "3.5rem" },
+//             }}
+//           >
+//             גלריית האלבומים שלי
+//           </Typography>
+//           <Typography
+//             variant="h6"
+//             sx={{
+//               color: theme.palette.text.secondary,
+//               maxWidth: 600,
+//               mx: "auto",
+//               mb: 4,
+//             }}
+//           >
+//             ארגן את התמונות שלך באלבומים מותאמים אישית וצור זיכרונות בלתי נשכחים
+//           </Typography>
+
+//           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 4 }}>
+//             <SearchImages />
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 fontSize: "1.1rem",
+//                 fontWeight: 600,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                 boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+//                 "&:hover": {
+//                   transform: "translateY(-3px)",
+//                   boxShadow: "0 12px 35px rgba(102, 126, 234, 0.6)",
+//                 },
+//                 transition: "all 0.3s ease",
+//               }}
+//             >
+//               יצירת אלבום חדש
+//             </Button>
+//           </Box>
+//         </Box>
+
+//         {/* Stats Cards */}
+//         <Grid container spacing={3} sx={{ mb: 6 }}>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(
+//                   theme.palette.primary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//               }}
+//             >
+//               <Collections sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, lineHeight: 1 }}>
+//                   {albums.length}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   אלבומים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.secondary.main, 0.1)}, ${alpha(
+//                   theme.palette.secondary.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.secondary.main, 0.1)}`,
+//               }}
+//             >
+//               <ImageIcon sx={{ fontSize: 32, color: theme.palette.secondary.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.secondary.main, lineHeight: 1 }}>
+//                   {albums.reduce((total, album) => total + album.images.length, 0)}
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תמונות
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)}, ${alpha(
+//                   theme.palette.info.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+//               }}
+//             >
+//               <Palette sx={{ fontSize: 32, color: theme.palette.info.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.info.main, lineHeight: 1 }}>
+//                   0
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   קולאז'ים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//           <Grid item xs={12} sm={6} md={3}>
+//             <Paper
+//               sx={{
+//                 p: 2,
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: 2,
+//                 borderRadius: 3,
+//                 background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)}, ${alpha(
+//                   theme.palette.success.light,
+//                   0.05,
+//                 )})`,
+//                 border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
+//               }}
+//             >
+//               <AutoAwesome sx={{ fontSize: 32, color: theme.palette.success.main }} />
+//               <Box>
+//                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.success.main, lineHeight: 1 }}>
+//                   AI
+//                 </Typography>
+//                 <Typography variant="body2" color="text.secondary">
+//                   תיאורים
+//                 </Typography>
+//               </Box>
+//             </Paper>
+//           </Grid>
+//         </Grid>
+
+//         {/* Albums Grid */}
+//         {loading ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <CircularProgress
+//               size={60}
+//               sx={{
+//                 color: theme.palette.primary.main,
+//                 mb: 3,
+//               }}
+//             />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+//               טוען את האלבומים שלך...
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
+//               אנא המתן בזמן שאנחנו מביאים את האלבומים שלך
+//             </Typography>
+//           </Box>
+//         ) : albums.length === 0 ? (
+//           <Box
+//             sx={{
+//               textAlign: "center",
+//               py: 10,
+//               background: "rgba(255, 255, 255, 0.7)",
+//               borderRadius: 4,
+//               backdropFilter: "blur(10px)",
+//               border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//             }}
+//           >
+//             <PhotoLibraryIcon sx={{ fontSize: 80, color: theme.palette.text.disabled, mb: 3 }} />
+//             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+//               עדיין אין לך אלבומים
+//             </Typography>
+//             <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 4 }}>
+//               צור את האלבום הראשון שלך והתחל לארגן את התמונות שלך
+//             </Typography>
+//             <Button
+//               variant="contained"
+//               size="large"
+//               startIcon={<AddIcon />}
+//               onClick={() => setOpen(true)}
+//               sx={{
+//                 borderRadius: 3,
+//                 px: 4,
+//                 py: 2,
+//                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//               }}
+//             >
+//               יצירת האלבום הראשון
+//             </Button>
+//           </Box>
+//         ) : (
+//           <Grid container spacing={4} direction="row-reverse">
+//             {albums.map((album, index) => {
+//               const coverImage = getCoverImage(album)
+//               return (
+//                 <Grow in={true} timeout={300 * (index + 1)} key={album.id}>
+//                   <Grid item xs={12} sm={6} md={4} lg={3}>
+//                     <Card
+//                       sx={{
+//                         height: "100%",
+//                         borderRadius: 4,
+//                         overflow: "hidden",
+//                         background: "rgba(255, 255, 255, 0.9)",
+//                         backdropFilter: "blur(20px)",
+//                         border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                         transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+//                         "&:hover": {
+//                           transform: "translateY(-12px) scale(1.02)",
+//                           boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
+//                           "& .album-avatar": {
+//                             transform: "scale(1.1)",
+//                             background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                           },
+//                           "& .album-actions": {
+//                             opacity: 1,
+//                             transform: "translateY(0)",
+//                           },
+//                         },
+//                       }}
+//                     >
+//                       <CardActionArea onClick={() => handleAlbumClick(album.id)} sx={{ height: "100%" }}>
+//                         <Box
+//                           sx={{
+//                             height: 200,
+//                             display: "flex",
+//                             flexDirection: "column",
+//                             alignItems: "center",
+//                             justifyContent: "center",
+//                             background: coverImage
+//                               ? `url(${coverImage}) center/cover`
+//                               : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(
+//                                   theme.palette.secondary.main,
+//                                   0.05,
+//                                 )})`,
+//                             position: "relative",
+//                             overflow: "hidden",
+//                             "&::before": {
+//                               content: '""',
+//                               position: "absolute",
+//                               top: 0,
+//                               left: 0,
+//                               right: 0,
+//                               bottom: 0,
+//                               background: coverImage
+//                                 ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
+//                                 : `radial-gradient(circle at 30% 70%, ${alpha(
+//                                     theme.palette.primary.main,
+//                                     0.1,
+//                                   )} 0%, transparent 50%)`,
+//                             },
+//                           }}
+//                         >
+//                           {!coverImage && (
+//                             <Avatar
+//                               className="album-avatar"
+//                               sx={{
+//                                 width: 80,
+//                                 height: 80,
+//                                 bgcolor: alpha(theme.palette.primary.main, 0.1),
+//                                 color: theme.palette.primary.main,
+//                                 transition: "all 0.3s ease",
+//                                 border: `3px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+//                                 mb: 2,
+//                                 zIndex: 1,
+//                               }}
+//                             >
+//                               <PhotoLibraryIcon sx={{ fontSize: 35 }} />
+//                             </Avatar>
+//                           )}
+
+//                           <Chip
+//                             label={`${album.images.length} תמונות`}
+//                             size="small"
+//                             sx={{
+//                               backgroundColor: alpha(theme.palette.background.paper, 0.9),
+//                               color: theme.palette.primary.main,
+//                               fontWeight: 600,
+//                               zIndex: 1,
+//                             }}
+//                           />
+//                         </Box>
+
+//                         <CardContent sx={{ p: 3, textAlign: "center" }}>
+//                           <Typography
+//                             variant="h6"
+//                             sx={{
+//                               fontWeight: 700,
+//                               mb: 1,
+//                               color: theme.palette.text.primary,
+//                               overflow: "hidden",
+//                               textOverflow: "ellipsis",
+//                               whiteSpace: "nowrap",
+//                             }}
+//                           >
+//                             {album.name}
+//                           </Typography>
+//                           <Typography variant="body2" color="text.secondary">
+//                             {album.createdAt ? formatDate(album.createdAt.toString()) : "תאריך לא זמין"}
+//                           </Typography>
+//                         </CardContent>
+//                       </CardActionArea>
+
+//                       <Box
+//                         className="album-actions"
+//                         sx={{
+//                           position: "absolute",
+//                           bottom: 0,
+//                           left: 0,
+//                           right: 0,
+//                           p: 2,
+//                           background: `linear-gradient(to top, ${alpha(theme.palette.background.paper, 0.95)}, transparent)`,
+//                           backdropFilter: "blur(10px)",
+//                           display: "flex",
+//                           justifyContent: "space-between",
+//                           opacity: 0,
+//                           transform: "translateY(10px)",
+//                           transition: "all 0.3s ease",
+//                         }}
+//                       >
+//                         <Button
+//                           startIcon={<EditIcon />}
+//                           size="small"
+//                           variant="contained"
+//                           onClick={(e) => {
+//                             e.stopPropagation()
+//                             setSelectedAlbumId(album.id)
+//                             setOpenRename(true)
+//                           }}
+//                           sx={{
+//                             borderRadius: 3,
+//                             background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                             color: "white",
+//                             px: 2,
+//                             fontSize: "0.75rem",
+//                             "&:hover": {
+//                               transform: "translateY(-2px)",
+//                               boxShadow: "0 8px 20px rgba(102, 126, 234, 0.4)",
+//                             },
+//                           }}
+//                         >
+//                           עריכה
+//                         </Button>
+//                         <Button
+//                           startIcon={<DeleteIcon />}
+//                           size="small"
+//                           variant="contained"
+//                           color="error"
+//                           onClick={(e) => {
+//                             e.stopPropagation()
+//                             handleDelete(album.id)
+//                           }}
+//                           sx={{
+//                             borderRadius: 3,
+//                             px: 2,
+//                             fontSize: "0.75rem",
+//                             "&:hover": {
+//                               transform: "translateY(-2px)",
+//                               boxShadow: "0 8px 20px rgba(244, 67, 54, 0.4)",
+//                             },
+//                           }}
+//                         >
+//                           מחק
+//                         </Button>
+//                       </Box>
+//                     </Card>
+//                   </Grid>
+//                 </Grow>
+//               )
+//             })}
+//           </Grid>
+//         )}
+
+//         {/* Create Album Modal */}
+//         <Modal open={open} onClose={() => setOpen(false)} closeAfterTransition>
+//           <Fade in={open}>
+//             <Box
+//               sx={{
+//                 position: "absolute",
+//                 top: "50%",
+//                 left: "50%",
+//                 transform: "translate(-50%, -50%)",
+//                 width: { xs: "90%", sm: 500 },
+//                 background: "rgba(255, 255, 255, 0.95)",
+//                 backdropFilter: "blur(20px)",
+//                 borderRadius: 4,
+//                 boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+//                 border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+//                 p: 4,
+//               }}
+//             >
+//               <Typography
+//                 variant="h5"
+//                 sx={{
+//                   fontWeight: 700,
+//                   textAlign: "center",
+//                   mb: 3,
+//                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                   backgroundClip: "text",
+//                   WebkitBackgroundClip: "text",
+//                   WebkitTextFillColor: "transparent",
+//                 }}
+//               >
+//                 יצירת אלבום חדש
+//               </Typography>
+
+//               <form onSubmit={handleCreate}>
+//                 <Stack spacing={3}>
+//                   <TextField
+//                     label="שם האלבום"
+//                     required
+//                     inputRef={albumName}
+//                     fullWidth
+//                     variant="outlined"
+//                     sx={{
+//                       "& .MuiOutlinedInput-root": {
+//                         borderRadius: 2,
+//                         backgroundColor: alpha(theme.palette.primary.main, 0.02),
+//                       },
+//                     }}
+//                   />
+
+//                   <Stack direction="row" spacing={2} justifyContent="center">
+//                     <Button
+//                       variant="outlined"
+//                       onClick={() => setOpen(false)}
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         borderColor: alpha(theme.palette.primary.main, 0.3),
+//                       }}
+//                     >
+//                       ביטול
+//                     </Button>
+//                     <Button
+//                       variant="contained"
+//                       type="submit"
+//                       sx={{
+//                         borderRadius: 2,
+//                         px: 4,
+//                         background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                         "&:hover": {
+//                           background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+//                         },
+//                       }}
+//                     >
+//                       יצירת אלבום
+//                     </Button>
+//                   </Stack>
+//                 </Stack>
+//               </form>
+//             </Box>
+//           </Fade>
+//         </Modal>
+//       </Container>
+//     </Box>
+//   )
+// }
+
+// export default Albums
+
+
+"use client"
+
+import { type FormEvent, useEffect, useReducer, useRef, useState } from "react"
+import { albumReducer, initialAlbumsState } from "../files/AlbumsReducer"
+import type { Album } from "../../Types"
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  Container,
+  Grid,
+  Grow,
+  Modal,
+  TextField,
+  Typography,
+  alpha,
+  useTheme,
+  Fade,
+  Stack,
+  Chip,
+  Paper,
+  CircularProgress,
+  IconButton,
+} from "@mui/material"
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Add as AddIcon,
+  PhotoLibrary as PhotoLibraryIcon,
+  Collections,
+  Image as ImageIcon,
+  Palette,
+  AutoAwesome,
+} from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
+import axiosInstance from "../axiosInstance"
+import SearchImages from "../files/SearchImages"
+
+const Albums = () => {
+  const theme = useTheme()
+  const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState)
+  const [, setSelectedAlbumId] = useState<number | null>(null)
+  const [open, setOpen] = useState(false)
+  const [, setOpenRename] = useState(false)
+  const albumName = useRef<HTMLInputElement>(null)
+  const navigate = useNavigate()
+  const token = localStorage.getItem("token")
+  const [loading, setLoading] = useState(true)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [albumToDelete, setAlbumToDelete] = useState<Album | null>(null)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
+  // הוסף state חדש לloading של פעולות
+  const [createLoading, setCreateLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+
+  useEffect(() => {
+    loadAlbums()
+  }, [])
+
+  useEffect(() => {
+    if (snackbarOpen) {
+      const timer = setTimeout(() => {
+        setSnackbarOpen(false)
+      }, 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [snackbarOpen])
+
+  const loadAlbums = async () => {
+    setLoading(true)
+    try {
+      const response = await axiosInstance.get("/album", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log("Response from server:", response.data)
+
+      const albumsData: Album[] = response.data
+      dispatch({ type: "SET_ALBUMS", payload: albumsData })
+    } catch (error) {
+      console.error("שגיאה בטעינת התמונות:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleAlbumClick = (albumId: number) => {
+    setSelectedAlbumId(albumId)
+    navigate(`/albums/${albumId}`)
+  }
+
+  // עדכן את handleDelete
+  const handleDelete = async () => {
+    if (!albumToDelete) return
+    setDeleteLoading(true)
+
+    try {
+      const response = await axiosInstance.delete(`/album/${albumToDelete.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log("Album deleted:", response.data)
+      dispatch({ type: "DELETE_ALBUM", payload: { albumId: albumToDelete.id } })
+      setSnackbarMessage("האלבום נמחק בהצלחה!")
+      setSnackbarSeverity("success")
+      setSnackbarOpen(true)
+    } catch (error) {
+      console.error("Error deleting album:", error)
+      setSnackbarMessage("שגיאה במחיקת האלבום")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
+    } finally {
+      setDeleteLoading(false)
+      setDeleteDialogOpen(false)
+      setAlbumToDelete(null)
+    }
+  }
+
+  const handleDeleteClick = (album: Album) => {
+    setAlbumToDelete(album)
+    setDeleteDialogOpen(true)
+  }
+
+  // עדכן את handleCreate
+  const handleCreate = async (e: FormEvent) => {
+    e.preventDefault()
+    setCreateLoading(true)
+
+    const newAlbum: Partial<Album> = {
+      name: albumName.current?.value || "undefined",
+      images: [],
+      userId: Number.parseInt(localStorage.getItem("userId") || "0"),
+    }
+
+    try {
+      const response = await axiosInstance.post("/album", newAlbum, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log("Album created:", response.data)
+      dispatch({ type: "CREATE_ALBUM", payload: response.data })
+      setOpen(false)
+    } catch (error) {
+      console.error("Error creating album:", error)
+    } finally {
+      setCreateLoading(false)
+    }
+  }
+
+  // פונקציה לפורמט תאריך
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString("he-IL", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      })
+    } catch (error) {
+      return "תאריך לא זמין"
+    }
+  }
+
+  // פונקציה לקבלת תמונת כיסוי
+  const getCoverImage = (album: Album) => {
+    if (album.images && album.images.length > 0) {
+      // נחפש תמונה עם s3URL תקין
+      const validImage = album.images.find((img) => img && img.s3URL && img.s3URL.trim() !== "")
+      return validImage?.s3URL || null
+    }
+    return null
+  }
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(
+          theme.palette.secondary.main,
+          0.05,
+        )} 100%)`,
+        pt: 16,
+        pb: 6,
+      }}
+    >
+      <Container maxWidth="xl">
+        {/* Hero Header */}
+        <Box sx={{ textAlign: "center", mb: 6 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 800,
+              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              mb: 2,
+              fontSize: { xs: "2.5rem", md: "3.5rem" },
+            }}
           >
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-              <Card
-                sx={{
-                  m: 1,
-                  boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-                  borderRadius: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  height: "100%",
-                  width: "100%",
-                  // boxShadow: '0 8px 24px rgba(149, 157, 165, 0.2)',
-                  transition: 'all 0.3s ease-in-out',
-                  '&:hover': {
-                    // transform: 'translateY(-8px)',
-                    boxShadow: '0 16px 40px rgba(149, 157, 165, 0.3)',
-                  }
-                }}
-              >
-                <CardActionArea
-                  onClick={() => handleAlbumClick(album.id)}
-                  sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
-                >
-                  <Box
-                    sx={{
-                      height: 160,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Avatar
+            גלריית האלבומים שלי
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              color: theme.palette.text.secondary,
+              maxWidth: 600,
+              mx: "auto",
+              mb: 4,
+            }}
+          >
+            ארגן את התמונות שלך באלבומים מותאמים אישית וצור זיכרונות בלתי נשכחים
+          </Typography>
+
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 4 }}>
+            <SearchImages />
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<AddIcon />}
+              onClick={() => setOpen(true)}
+              sx={{
+                borderRadius: 3,
+                px: 4,
+                py: 2,
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+                "&:hover": {
+                  transform: "translateY(-3px)",
+                  boxShadow: "0 12px 35px rgba(102, 126, 234, 0.6)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              יצירת אלבום חדש
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ mb: 6 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(
+                  theme.palette.primary.light,
+                  0.05,
+                )})`,
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+              }}
+            >
+              <Collections sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, lineHeight: 1 }}>
+                  {albums.length}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  אלבומים
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${alpha(theme.palette.secondary.main, 0.1)}, ${alpha(
+                  theme.palette.secondary.light,
+                  0.05,
+                )})`,
+                border: `1px solid ${alpha(theme.palette.secondary.main, 0.1)}`,
+              }}
+            >
+              <ImageIcon sx={{ fontSize: 32, color: theme.palette.secondary.main }} />
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.secondary.main, lineHeight: 1 }}>
+                  {albums.reduce((total, album) => total + album.images.length, 0)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  תמונות
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)}, ${alpha(
+                  theme.palette.info.light,
+                  0.05,
+                )})`,
+                border: `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+              }}
+            >
+              <Palette sx={{ fontSize: 32, color: theme.palette.info.main }} />
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.info.main, lineHeight: 1 }}>
+                  0
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  קולאז'ים
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)}, ${alpha(
+                  theme.palette.success.light,
+                  0.05,
+                )})`,
+                border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
+              }}
+            >
+              <AutoAwesome sx={{ fontSize: 32, color: theme.palette.success.main }} />
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.success.main, lineHeight: 1 }}>
+                  AI
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  תיאורים
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        {/* Albums Grid */}
+        {loading ? (
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 10,
+              background: "rgba(255, 255, 255, 0.7)",
+              borderRadius: 4,
+              backdropFilter: "blur(10px)",
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            }}
+          >
+            <CircularProgress
+              size={60}
+              sx={{
+                color: theme.palette.primary.main,
+                mb: 3,
+              }}
+            />
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+              טוען את האלבומים שלך...
+            </Typography>
+            <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
+              אנא המתן בזמן שאנחנו מביאים את האלבומים שלך
+            </Typography>
+          </Box>
+        ) : albums.length === 0 ? (
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 10,
+              background: "rgba(255, 255, 255, 0.7)",
+              borderRadius: 4,
+              backdropFilter: "blur(10px)",
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            }}
+          >
+            <PhotoLibraryIcon sx={{ fontSize: 80, color: theme.palette.text.disabled, mb: 3 }} />
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: theme.palette.text.primary }}>
+              עדיין אין לך אלבומים
+            </Typography>
+            <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 4 }}>
+              צור את האלבום הראשון שלך והתחל לארגן את התמונות שלך
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<AddIcon />}
+              onClick={() => setOpen(true)}
+              sx={{
+                borderRadius: 3,
+                px: 4,
+                py: 2,
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              }}
+            >
+              יצירת האלבום הראשון
+            </Button>
+          </Box>
+        ) : (
+          <Grid container spacing={4} direction="row-reverse">
+            {albums.map((album, index) => {
+              const coverImage = getCoverImage(album)
+              return (
+                <Grow in={true} timeout={300 * (index + 1)} key={album.id}>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Card
                       sx={{
-                        width: 90,
-                        height: 90,
-                        bgcolor: 'primary.main',
+                        height: "100%",
+                        borderRadius: 4,
+                        overflow: "hidden",
+                        background: "rgba(255, 255, 255, 0.9)",
+                        backdropFilter: "blur(20px)",
+                        border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&:hover": {
+                          transform: "translateY(-12px) scale(1.02)",
+                          boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
+                          "& .album-avatar": {
+                            transform: "scale(1.1)",
+                            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                          },
+                          "& .album-actions": {
+                            opacity: 1,
+                            transform: "translateY(0)",
+                          },
+                        },
                       }}
                     >
-                      <PhotoLibraryIcon sx={{ fontSize: 45 }} />
-                    </Avatar>
-                  </Box>
-                  <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                    <Typography variant="h6" fontWeight="medium" sx={{ mb: 1 }}>
-                      {album.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {` תמונות : ${album.images.length} `}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                      <CardActionArea onClick={() => handleAlbumClick(album.id)} sx={{ height: "100%" }}>
+                        <Box
+                          sx={{
+                            height: 200,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: coverImage
+                              ? `url(${coverImage}) center/cover`
+                              : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(
+                                  theme.palette.secondary.main,
+                                  0.05,
+                                )})`,
+                            position: "relative",
+                            overflow: "hidden",
+                            "&::before": {
+                              content: '""',
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              background: coverImage
+                                ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
+                                : `radial-gradient(circle at 30% 70%, ${alpha(
+                                    theme.palette.primary.main,
+                                    0.1,
+                                  )} 0%, transparent 50%)`,
+                            },
+                          }}
+                        >
+                          {!coverImage && (
+                            <Avatar
+                              className="album-avatar"
+                              sx={{
+                                width: 80,
+                                height: 80,
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: theme.palette.primary.main,
+                                transition: "all 0.3s ease",
+                                border: `3px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                                mb: 2,
+                                zIndex: 1,
+                              }}
+                            >
+                              <PhotoLibraryIcon sx={{ fontSize: 35 }} />
+                            </Avatar>
+                          )}
 
-                <Box
+                          <Chip
+                            label={`${album.images.length} תמונות`}
+                            size="small"
+                            sx={{
+                              backgroundColor: alpha(theme.palette.background.paper, 0.9),
+                              color: theme.palette.primary.main,
+                              fontWeight: 600,
+                              zIndex: 1,
+                            }}
+                          />
+                        </Box>
+
+                        <CardContent sx={{ p: 3, textAlign: "center" }}>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: 700,
+                              mb: 1,
+                              color: theme.palette.text.primary,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {album.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {album.createdAt ? formatDate(album.createdAt) : "תאריך לא זמין"}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+
+                      <Box
+                        className="album-actions"
+                        sx={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          p: 2,
+                          background: `linear-gradient(to top, ${alpha(theme.palette.background.paper, 0.95)}, transparent)`,
+                          backdropFilter: "blur(10px)",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          opacity: 0,
+                          transform: "translateY(10px)",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        <Button
+                          startIcon={<EditIcon />}
+                          size="small"
+                          variant="contained"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedAlbumId(album.id)
+                            setOpenRename(true)
+                          }}
+                          sx={{
+                            borderRadius: 3,
+                            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                            color: "white",
+                            px: 2,
+                            fontSize: "0.75rem",
+                            "&:hover": {
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 8px 20px rgba(102, 126, 234, 0.4)",
+                            },
+                          }}
+                        >
+                          עריכה
+                        </Button>
+                        <Button
+                          startIcon={<DeleteIcon />}
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDeleteClick(album)
+                          }}
+                          sx={{
+                            borderRadius: 3,
+                            px: 2,
+                            fontSize: "0.75rem",
+                            "&:hover": {
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 8px 20px rgba(244, 67, 54, 0.4)",
+                            },
+                          }}
+                        >
+                          מחק
+                        </Button>
+                      </Box>
+                    </Card>
+                  </Grid>
+                </Grow>
+              )
+            })}
+          </Grid>
+        )}
+
+        {/* Create Album Modal */}
+        <Modal open={open} onClose={() => setOpen(false)} closeAfterTransition>
+          <Fade in={open}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: { xs: "90%", sm: 500 },
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(20px)",
+                borderRadius: 4,
+                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                p: 4,
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 700,
+                  textAlign: "center",
+                  mb: 3,
+                  background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                יצירת אלבום חדש
+              </Typography>
+
+              <form onSubmit={handleCreate}>
+                <Stack spacing={3}>
+                  <TextField
+                    label="שם האלבום"
+                    required
+                    inputRef={albumName}
+                    fullWidth
+                    variant="outlined"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: 2,
+                        backgroundColor: alpha(theme.palette.primary.main, 0.02),
+                      },
+                    }}
+                  />
+
+                  <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button
+                      variant="outlined"
+                      onClick={() => setOpen(false)}
+                      sx={{
+                        borderRadius: 2,
+                        px: 4,
+                        borderColor: alpha(theme.palette.primary.main, 0.3),
+                      }}
+                    >
+                      ביטול
+                    </Button>
+                    {/* עדכן את כפתור יצירת האלבום במודל */}
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={createLoading}
+                      sx={{
+                        borderRadius: 2,
+                        px: 4,
+                        background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                        "&:hover": {
+                          background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                        },
+                        "&:disabled": {
+                          background: alpha(theme.palette.primary.main, 0.3),
+                        },
+                      }}
+                    >
+                      {createLoading ? (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <CircularProgress size={16} sx={{ color: "white" }} />
+                          יוצר אלבום...
+                        </Box>
+                      ) : (
+                        "יצירת אלבום"
+                      )}
+                    </Button>
+                  </Stack>
+                </Stack>
+              </form>
+            </Box>
+          </Fade>
+        </Modal>
+
+        {/* Delete Confirmation Dialog */}
+        <Modal open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} closeAfterTransition>
+          <Fade in={deleteDialogOpen}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: { xs: "90%", sm: 500 },
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(20px)",
+                borderRadius: 4,
+                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
+                p: 4,
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 700,
+                  textAlign: "center",
+                  mb: 3,
+                  color: theme.palette.error.main,
+                }}
+              >
+                מחיקת אלבום
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{
+                  textAlign: "center",
+                  mb: 4,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                האלבום "{albumToDelete?.name}" מכיל {albumToDelete?.images.length} תמונות.
+                <br />
+                האם אתה בטוח שברצונך למחוק את האלבום?
+              </Typography>
+
+              <Stack direction="row" spacing={2} justifyContent="center">
+                <Button
+                  variant="outlined"
+                  onClick={() => setDeleteDialogOpen(false)}
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    p: 1,
-                    bgcolor: 'rgba(0,0,0,0.02)'
+                    borderRadius: 2,
+                    px: 4,
+                    borderColor: alpha(theme.palette.text.secondary, 0.3),
                   }}
                 >
-                  <Button
-                    startIcon={<EditIcon />}
-                    onClick={() => {
-                      setSelectedAlbumId(album.id);
-                      setOpenRename(true);
-                    }}
-                    size="small"
-                    sx={{ color: 'text.secondary' }}
-                  >
-                    שינוי שם
-                  </Button>
-                  <IconButton
-                    onClick={() => handleDelete(album.id)}
-                    color="error"
-                    size="small"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </Card>
-            </Grid>
-          </Grow>
-        ))}
-      </Grid>
-    </Container>
-  );
+                  ביטול
+                </Button>
+                {/* עדכן את כפתור מחיקת האלבום במודל המחיקה */}
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  disabled={deleteLoading}
+                  sx={{
+                    borderRadius: 2,
+                    px: 4,
+                    "&:hover": {
+                      backgroundColor: theme.palette.error.dark,
+                    },
+                    "&:disabled": {
+                      backgroundColor: alpha(theme.palette.error.main, 0.3),
+                    },
+                  }}
+                >
+                  {deleteLoading ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <CircularProgress size={16} sx={{ color: "white" }} />
+                      מוחק...
+                    </Box>
+                  ) : (
+                    "מחק אלבום"
+                  )}
+                </Button>
+              </Stack>
+            </Box>
+          </Fade>
+        </Modal>
 
+        {/* Success/Error Snackbar */}
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 9999,
+            transform: snackbarOpen ? "translateY(0)" : "translateY(100px)",
+            opacity: snackbarOpen ? 1 : 0,
+            transition: "all 0.3s ease",
+          }}
+        >
+          {snackbarOpen && (
+            <Paper
+              sx={{
+                px: 2,
+                py: 1.5,
+                borderRadius: 2,
+                background: snackbarSeverity === "success" ? theme.palette.success.main : theme.palette.error.main,
+                color: "white",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                minWidth: 200,
+                maxWidth: 300,
+              }}
+            >
+              {snackbarSeverity === "success" ? (
+                <Box sx={{ color: "white", fontSize: 16 }}>✓</Box>
+              ) : (
+                <Box sx={{ color: "white", fontSize: 16 }}>✕</Box>
+              )}
+              <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem" }}>
+                {snackbarMessage}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => setSnackbarOpen(false)}
+                sx={{
+                  color: "white",
+                  ml: "auto",
+                  width: 20,
+                  height: 20,
+                  fontSize: "0.75rem",
+                }}
+              >
+                ✕
+              </IconButton>
+            </Paper>
+          )}
+        </Box>
+      </Container>
+    </Box>
+  )
 }
-export default Albums;
 
+export default Albums
 
 

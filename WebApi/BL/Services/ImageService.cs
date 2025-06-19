@@ -84,82 +84,161 @@ namespace BL.Services
             return img;
         }
 
+        //public async Task<string> GetImageDescriptionAsync(string imageUrl)
+        //{
+        //    if (string.IsNullOrEmpty(imageUrl))
+        //    {
+        //        throw new ArgumentException("Image URL cannot be null or empty");
+        //    }
+
+        //    string prompt = $"תאר את התמונה הבאה ותכלול מילות מפתח שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
+
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+
+        //    var requestBody = new
+        //    {
+        //        model = "gpt-4o-mini", // gpt-4o תומך בתמונות, gpt-4o-mini לא תמיד
+        //        messages = new[]
+        //        {
+        //            new
+        //            {
+        //                role = "user",
+        //                content = new object[]
+        //                {
+        //                    new
+        //                    {
+        //                        type = "text",
+        //                        text = prompt
+        //                    },
+        //                    new
+        //                    {
+        //                        type = "image_url",
+        //                        image_url = new
+        //                        {
+        //                            url = imageUrl,
+        //                            detail = "high" // או "low" לרזולוציה נמוכה יותר
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        },
+        //        max_tokens = 100
+        //    };
+
+        //    var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+
+        //    var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+        //    var responseString = await response.Content.ReadAsStringAsync();
+
+        //    // שלב חשוב! הדפסה של מה שחוזר
+        //    Console.WriteLine("AI RESPONSE: " + responseString);
+
+        //    // בדיקה האם הצליח בכלל
+        //    if (!response.IsSuccessStatusCode)
+        //    {
+        //        throw new Exception($"OpenAI API error: {response.StatusCode} - {responseString}");
+        //    }
+
+        //    // נסיון לפרש את התשובה
+        //    dynamic result = JsonConvert.DeserializeObject(responseString);
+
+        //    // בדיקה בטוחה של choices
+        //    if (result?.choices != null && result.choices.Count > 0)
+        //    {
+        //        var aiMessage = result.choices[0].message.content.ToString();
+        //        return aiMessage;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("תשובה לא תקינה: אין choices בתוצאה.");
+        //    }
+        //}
+
+
+
         public async Task<string> GetImageDescriptionAsync(string imageUrl)
         {
-            if (string.IsNullOrEmpty(imageUrl))
+            try
             {
-                throw new ArgumentException("Image URL cannot be null or empty");
-            }
-
-            string prompt = $"נתח את התמונה הבאה ותחזיר רשימת תגיות קצרה (5–8 תגיות) שמתארת את תוכן התמונה בצורה תמציתית. אל תכלול משפטים שלמים, רק תגיות";
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
-
-            var requestBody = new
-            {
-                model = "gpt-4o-mini", // gpt-4o תומך בתמונות, gpt-4o-mini לא תמיד
-                messages = new[]
+                if (string.IsNullOrEmpty(imageUrl))
                 {
-                    new
+                    throw new ArgumentException("Image URL cannot be null or empty");
+                }
+
+                string prompt = $"תאר את התמונה הבאה ותכלול מילות מפתח שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+
+                var requestBody = new
+                {
+                    model = "gpt-4o-mini",
+                    messages = new[]
                     {
-                        role = "user",
-                        content = new object[]
+                new
+                {
+                    role = "user",
+                    content = new object[]
+                    {
+                        new
                         {
-                            new
+                            type = "text",
+                            text = prompt
+                        },
+                        new
+                        {
+                            type = "image_url",
+                            image_url = new
                             {
-                                type = "text",
-                                text = prompt
-                            },
-                            new
-                            {
-                                type = "image_url",
-                                image_url = new
-                                {
-                                    url = imageUrl,
-                                    detail = "high" // או "low" לרזולוציה נמוכה יותר
-                                }
+                                url = imageUrl,
+                                detail = "high"
                             }
                         }
                     }
-                },
-                max_tokens = 100
-            };
+                }
+            },
+                    max_tokens = 100
+                };
 
-            var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
-            var responseString = await response.Content.ReadAsStringAsync();
+                var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+                var responseString = await response.Content.ReadAsStringAsync();
 
-            // שלב חשוב! הדפסה של מה שחוזר
-            Console.WriteLine("AI RESPONSE: " + responseString);
+                Console.WriteLine("AI RESPONSE: " + responseString);
 
-            // בדיקה האם הצליח בכלל
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"OpenAI API error: {response.StatusCode} - {responseString}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"OpenAI API error: {response.StatusCode} - {responseString}");
+                    return "לא ניתן לקבל תיאור כרגע";
+                }
+
+                dynamic result = JsonConvert.DeserializeObject(responseString);
+
+                if (result?.choices != null && result.choices.Count > 0)
+                {
+                    var aiMessage = result.choices[0].message.content.ToString();
+                    return aiMessage;
+                }
+                else
+                {
+                    Console.WriteLine("תשובה לא תקינה: אין choices בתוצאה.");
+                    return "לא ניתן לנתח את התמונה כרגע";
+                }
             }
-
-            // נסיון לפרש את התשובה
-            dynamic result = JsonConvert.DeserializeObject(responseString);
-
-            // בדיקה בטוחה של choices
-            if (result?.choices != null && result.choices.Count > 0)
+            catch (Exception ex)
             {
-                var aiMessage = result.choices[0].message.content.ToString();
-                return aiMessage;
-            }
-            else
-            {
-                throw new Exception("תשובה לא תקינה: אין choices בתוצאה.");
+                Console.WriteLine("שגיאה בתיאור תמונה מ־OpenAI: " + ex.Message);
+                return "תיאור לא זמין כרגע";
             }
         }
 
 
 
-        public async Task<List<Image>> SearchImagesAsync(string query)
+
+        public async Task<List<Image>> SearchImagesAsync(string query, int userId)
         {
             var images = await _dataContext.Images
-                .Where(i => i.Description.ToLower().Contains(query))
+                .Where(i => i.UserId==userId && i.Description.ToLower().Contains(query))
                 .ToListAsync();
             return images;
         }

@@ -15,7 +15,7 @@ namespace BL.InterfacesServices
         public Task<Image> UpdateImageAsync(int id, Image img);
         public Task<Image> RemoveImageAsync(int id);
         public Task<string> GetImageDescriptionAsync(string imageUrl);
-        public Task<List<Image>> SearchImagesAsync(string query);
+        public Task<List<Image>> SearchImagesAsync(string query, int userId);
 
     }
 }

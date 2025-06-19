@@ -12,6 +12,7 @@ export type Image = {
     s3URL: string
     albumId: number,
     ownerId: number,
+    description: string
 }
 export type Action = {
     type: 'CREATE' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'LOGOUT',
@@ -21,6 +22,7 @@ export type Album = {
     id: number,
     name: string,
     images: Image[],
+    createdAt: string,
     userId: number
 }
 export type ImageAction =
