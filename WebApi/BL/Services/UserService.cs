@@ -28,7 +28,7 @@ namespace BL.Services
         }
         public async Task<string> GenerateJwtTokenAsync(string username, string[] roles)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             //var claims = new List<Claim>
@@ -39,7 +39,7 @@ namespace BL.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // זה מה שחסר
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
                 new Claim(ClaimTypes.Name, username)
             };
 
@@ -51,8 +51,8 @@ namespace BL.Services
 
             var token = new JwtSecurityToken
             (
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["JWT_ISSUER"],
+                audience: _configuration["Jwt_Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials
@@ -81,12 +81,13 @@ namespace BL.Services
         public async Task<User> LoginUserAsync(string email, string password)
         {
             User user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
+            if (user == null || user.Password != password)
             {
-                throw new UnauthorizedAccessException("Invalid email or password");
+                return null; 
             }
             return user;
         }
+
         public async Task<User> UpdateUserAsync(int id, User user)
         {
             var newUser = _dataContext.Users.Where(user => user.Id == id).FirstOrDefault();

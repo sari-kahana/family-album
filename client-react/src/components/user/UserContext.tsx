@@ -11,7 +11,7 @@ const userReducer = (state: User, action: Action): User => {
         email: action.data.email ?? state.email,
         password: action.data.password ?? state.password,
         phone: action.data.phone ?? state.phone,
-        isConnected: action.data.isConnected ?? state.isConnected,
+        isConnected: true
       };
 
     case "UPDATE":
@@ -24,10 +24,17 @@ const userReducer = (state: User, action: Action): User => {
       return emptyUser;
 
     case "LOGIN":
-      return { ...state, isConnected: true };
+      return { 
+        ...state,
+        ...action.data,
+        isConnected: true 
+      };
       
     case "LOGOUT":
-      return { ...state, isConnected: false };
+      return {
+        ...state,
+        isConnected: false
+      };
 
     default:
       return state;

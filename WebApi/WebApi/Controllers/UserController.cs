@@ -45,7 +45,13 @@ namespace WebApi.Controllers
         {
             var userToAdd = new User { Name = user.Name, Email = user.Email, Password = user.Password, CreatedBy = "" , UpdatedBy = ""};
             await _userService.AddUserAsync(userToAdd);
-            return Ok(userToAdd);
+            var token = await _userService.GenerateJwtTokenAsync(userToAdd.Name, new[] { "User" });
+            return Ok(new 
+            {
+                Message = "User added successfully",
+                User = userToAdd,
+                Token = token
+            });
         }
 
         [HttpPost("login")]
@@ -56,7 +62,10 @@ namespace WebApi.Controllers
                 var user = await _userService.LoginUserAsync(loginRequest.Email, loginRequest.Password);
 
                 if (user == null)
+                {
+                    Console.WriteLine( "user null");
                     return Unauthorized(new { Message = "Invalid email or password" });
+                }
                 var token = await _userService.GenerateJwtTokenAsync(user.Name, new[] { "User" });
                 return Ok(new
                 {
@@ -67,7 +76,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred", Error = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred", Error = ex.Message, StackTrace = ex.StackTrace });
             }
         }
         

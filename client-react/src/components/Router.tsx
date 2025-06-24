@@ -7,12 +7,16 @@ import Albums from "./files/Albums";
 import HomePage from "./HomePage";
 import Collages from "./files/Collages";
 import SearchResults from "./files/SearchResults";
+import Login from "./user/Login";
+import Register from "./user/Register";
 
 const Router = createBrowserRouter([{
     path: '/',
     element: <><AppLayout /><Outlet/></>,
     children: [
         {path: '/', element: <HomePage/>},
+        {path: 'login', element: <Login/>},
+        {path: 'register', element: <Register/>},
         {path: 'albums', element: <Albums/>},
         {path: 'albums/:id', element: <MyGallery/>},
         { path: 'albums/:id/upload', element: <FileUploader/>},

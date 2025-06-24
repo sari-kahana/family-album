@@ -10,7 +10,11 @@ using WebApi;
 using Amazon.S3;
 
 
+
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
@@ -27,9 +31,11 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        ValidIssuer = builder.Configuration["JWT_ISSUER"],
+        ValidAudience = builder.Configuration["JWT_AUDIENCE"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"])
+        )
     };
 });
 
@@ -38,7 +44,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
     options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
-    options.AddPolicy("дпч'чшноки    нфапногхщввфнкпби)\"vieweronly\"’ фнкпби =< фнкпбихшч/епшчшнкч)\"дпч'чш\"((у\r\n", policy => policy.RequireRole("Viewer"));
+    options.AddPolicy("vieweronly", policy => policy.RequireRole("viewer"));
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,7 +75,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS_DEFAULTCONNECTION");
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -87,7 +93,6 @@ builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 }));
 
-DotNetEnv.Env.Load();
 
 var app = builder.Build();
 
