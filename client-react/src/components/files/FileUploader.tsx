@@ -1,176 +1,3 @@
-// import React, { useState } from 'react';
-// const FileUploader = () => {
-//   const [file, setFile] = useState<File | null>(null);
-//   const [progress, setProgress] = useState(0);
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files) {
-//       setFile(e.target.files[0]);
-//     }
-//   };
-
-//   const handleUpload = async () => {
-//     if (!file) return;
-
-//     try {
-//       // שלב 1: קבלת Presigned URL מהשרת
-//       const response = await axiosInstance.get('/upload/presigned-url', {
-//         params: { fileName: file.name }
-//       });
-
-//       const presignedUrl = response.data.url;
-
-//       // שלב 2: העלאת הקובץ ישירות ל-S3
-//       await axiosInstance.put(presignedUrl, file, {
-//         headers: {
-//           'Content-Type': file.type,
-//         },
-//         onUploadProgress: (progressEvent) => {
-//           const percent = Math.round(
-//             (progressEvent.loaded * 100) / (progressEvent.total || 1)
-//           );
-//           setProgress(percent);
-//         },
-//       });
-
-//       alert('הקובץ הועלה בהצלחה!');
-//     } catch (error) {
-//       console.error('שגיאה בהעלאה:', error);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <input type="file" onChange={handleFileChange} />
-//       <button onClick={handleUpload}>העלה קובץ</button>
-//       {progress > 0 && <div>התקדמות: {progress}%</div>}
-//     </div>
-//   );
-// };
-
-// export default FileUploader;
-
-// import React, { useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   LinearProgress,
-//   Typography,
-//   Card,
-//   CardContent,
-//   CardActions,
-// } from "@mui/material";
-// import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-// import { useNavigate, useParams } from "react-router-dom";
-// import axiosInstance from "../axiosInstance";
-
-// const FileUploader = () => {
-
-//   const { id } = useParams<{ id: string }>();
-//   const albumId = parseInt(id || '0');
-
-//   const [file, setFile] = useState<File | null>(null);
-//   const [progress, setProgress] = useState(0);
-//   const navigate = useNavigate();
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files) {
-//       setFile(e.target.files[0]);
-//     }
-//   };
-
-//   const handleUpload = async () => {
-//     if (!file) return;
-
-//     try {
-//       // שלב 1: קבלת Presigned URL מהשרת
-//       const response = await axiosInstance.get(
-//         "/upload/presigned-url",
-//         {
-//           params: {
-//             fileName: file.name,
-//             albumId: albumId // שלח את מזהה האלבום יחד עם שם הקובץ
-//           }
-//         }
-//       );
-
-//       const presignedUrl = response.data.url;
-
-//       // שלב 2: העלאת הקובץ ישירות ל-S3
-//       await axiosInstance.put(presignedUrl, file, {
-//         headers: { "Content-Type": file.type },
-//         onUploadProgress: (progressEvent) => {
-//           const percent = Math.round(
-//             (progressEvent.loaded * 100) / (progressEvent.total || 1)
-//           );
-//           setProgress(percent);
-//         },
-//       });
-
-//       // שלב 3: עדכון המידע על התמונה בשרת (אם נדרש)
-//       await axiosInstance.post('/Image', {
-//         name: file.name,
-//         S3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
-//         albumId: albumId, // שלח את מזהה האלבום
-//         ownerId: Number(localStorage.getItem('userId')) ?? undefined // שלח את מזהה המשתמש
-//       });
-
-//       alert("הקובץ הועלה בהצלחה!");
-//       setProgress(0);
-//       setFile(null);
-//       navigate(`/albums/${albumId}`); // חזור לאלבום לאחר ההעלאה
-
-
-//     } catch (error) {
-//       console.error("שגיאה בהעלאה:", error);
-//     }
-//   };
-
-//   return (
-//     <Card sx={{ maxWidth: 400, p: 2, boxShadow: 3, borderRadius: 3 }}>
-//       <CardContent>
-//         <Typography variant="h6" gutterBottom>
-//           העלאת תמונה
-//         </Typography>
-
-//         <input type="file" onChange={handleFileChange} style={{ marginBottom: 10 }} />
-
-//         {file && (
-//           <Typography variant="body2" color="text.secondary">
-//             קובץ נבחר: {file.name}
-//           </Typography>
-//         )}
-
-//         {progress > 0 && (
-//           <Box sx={{ width: "100%", mt: 2 }}>
-//             <LinearProgress variant="determinate" value={progress} />
-//             <Typography variant="body2" sx={{ mt: 1 }}>
-//               {progress}%
-//             </Typography>
-//           </Box>
-//         )}
-//       </CardContent>
-
-//       <CardActions>
-//         <Button
-//           variant="contained"
-//           color="primary"
-//           startIcon={<CloudUploadIcon />}
-//           onClick={handleUpload}
-//           disabled={!file}
-//           fullWidth
-//         >
-//           העלה קובץ
-//         </Button>
-//       </CardActions>
-//     </Card>
-//   );
-// };
-// export default FileUploader;
-
-
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import {
@@ -183,23 +10,23 @@ import {
   Container,
   Stack,
   alpha,
-  useTheme,
   Chip,
   Fade,
   Grow,
 } from "@mui/material"
-import { CloudUpload as CloudUploadIcon, ArrowBack, CheckCircle, Image as ImageIcon } from "@mui/icons-material"
+import { ArrowForward, CheckCircle, Image as ImageIcon, CloudUpload as CloudUploadIcon } from "@mui/icons-material"
 import { useNavigate, useParams } from "react-router-dom"
 import axiosInstance from "../axiosInstance"
 import axios from "axios"
+import theme from "../Theme"
 
 const FileUploader = () => {
-  const theme = useTheme()
   const { id } = useParams<{ id: string }>()
   const albumId = Number.parseInt(id || "0")
   const navigate = useNavigate()
 
   const [file, setFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadComplete, setUploadComplete] = useState(false)
@@ -207,8 +34,16 @@ const FileUploader = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
+      const selectedFile = e.target.files[0]
+      setFile(selectedFile)
       setUploadComplete(false)
+
+      // Create image preview
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string)
+      }
+      reader.readAsDataURL(selectedFile)
     }
   }
 
@@ -217,8 +52,16 @@ const FileUploader = () => {
     setDragOver(false)
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0])
+      const droppedFile = e.dataTransfer.files[0]
+      setFile(droppedFile)
       setUploadComplete(false)
+
+      // Create image preview
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string)
+      }
+      reader.readAsDataURL(droppedFile)
     }
   }
 
@@ -259,12 +102,19 @@ const FileUploader = () => {
       })
 
       // שלב 3: עדכון המידע על התמונה בשרת
-      await axiosInstance.post("/Image", {
-        name: file.name,
-        S3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
-        albumId: albumId,
-        ownerId: Number(localStorage.getItem("userId")) ?? undefined,
-      })
+      await axiosInstance.post(
+        "/Image",
+        {
+          name: file.name,
+          S3URL: `https://pictures-testpnoren.s3.us-east-1.amazonaws.com/${file.name}`,
+          albumId: albumId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      )
 
       setUploadComplete(true)
       setIsUploading(false)
@@ -292,25 +142,33 @@ const FileUploader = () => {
       sx={{
         minHeight: "100vh",
         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
-        py: 4,
+        pt: 12, // Add top padding to account for fixed navigation
+        pb: 4,
+        direction: "rtl",
       }}
     >
       <Container maxWidth="md">
         {/* Header */}
         <Box sx={{ mb: 4 }}>
-          <Button
-            startIcon={<ArrowBack />}
-            onClick={() => navigate(`/albums/${albumId}`)}
-            variant="outlined"
-            sx={{
-              mb: 3,
-              borderRadius: 2,
-              borderColor: alpha(theme.palette.primary.main, 0.3),
-              color: theme.palette.primary.main,
-            }}
-          >
-            חזרה לאלבום
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3 }}>
+            <Button
+              startIcon={<ArrowForward />}
+              onClick={() => navigate(`/albums/${albumId}`)}
+              variant="outlined"
+              sx={{
+                borderRadius: 2,
+                borderColor: alpha(theme.palette.primary.main, 0.3),
+                color: theme.palette.primary.main,
+                gap: 0.5, // הוספת רווח בין האייקון לטקסט
+                "&:hover": {
+                  borderColor: theme.palette.primary.main,
+                  backgroundColor: alpha(theme.palette.primary.main, 0.05),
+                },
+              }}
+            >
+              חזרה לאלבום
+            </Button>
+          </Box>
 
           <Typography
             variant="h3"
@@ -349,78 +207,129 @@ const FileUploader = () => {
           }}
         >
           <CardContent sx={{ p: 4 }}>
-            {/* Upload Area */}
-            <Box
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              sx={{
-                border: `3px dashed ${dragOver ? theme.palette.primary.main : alpha(theme.palette.primary.main, 0.3)}`,
-                borderRadius: 3,
-                py: 8,
-                px: 4,
-                textAlign: "center",
-                backgroundColor: dragOver
-                  ? alpha(theme.palette.primary.main, 0.05)
-                  : alpha(theme.palette.primary.main, 0.02),
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-                position: "relative",
-                mb: 4,
-                "&:hover": {
-                  borderColor: theme.palette.primary.main,
-                  backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                },
-              }}
-              onClick={() => document.getElementById("file-input")?.click()}
-            >
-              <input
-                id="file-input"
-                type="file"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-                accept="image/*"
-              />
-
-              <CloudUploadIcon
+            {/* Upload Area or Image Preview */}
+            {!imagePreview ? (
+              <Box
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
                 sx={{
-                  fontSize: 80,
-                  color: dragOver ? theme.palette.primary.main : alpha(theme.palette.primary.main, 0.6),
-                  mb: 3,
+                  border: `3px dashed ${dragOver ? theme.palette.primary.main : alpha(theme.palette.primary.main, 0.3)}`,
+                  borderRadius: 3,
+                  py: 8,
+                  px: 4,
+                  textAlign: "center",
+                  backgroundColor: dragOver
+                    ? alpha(theme.palette.primary.main, 0.05)
+                    : alpha(theme.palette.primary.main, 0.02),
                   transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  position: "relative",
+                  mb: 4,
+                  "&:hover": {
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: alpha(theme.palette.primary.main, 0.05),
+                  },
                 }}
-              />
-
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 700,
-                  color: theme.palette.primary.main,
-                  mb: 2,
-                }}
+                onClick={() => document.getElementById("file-input")?.click()}
               >
-                {dragOver ? "שחרר כאן" : "גרור תמונה לכאן"}
-              </Typography>
+                <input
+                  id="file-input"
+                  type="file"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                  accept="image/*"
+                />
 
-              <Typography
-                variant="body1"
-                sx={{
-                  color: theme.palette.text.secondary,
-                  mb: 3,
-                }}
-              >
-                או לחץ לבחירת קובץ מהמחשב
-              </Typography>
+                <CloudUploadIcon
+                  sx={{
+                    fontSize: 80,
+                    color: dragOver ? theme.palette.primary.main : alpha(theme.palette.primary.main, 0.6),
+                    mb: 3,
+                    transition: "all 0.3s ease",
+                  }}
+                />
 
-              <Chip
-                label="PNG, JPG, JPEG עד 10MB"
-                variant="outlined"
-                sx={{
-                  borderColor: alpha(theme.palette.primary.main, 0.3),
-                  color: theme.palette.text.secondary,
-                }}
-              />
-            </Box>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 700,
+                    color: theme.palette.primary.main,
+                    mb: 2,
+                  }}
+                >
+                  {dragOver ? "שחרר כאן" : "גרור תמונה לכאן"}
+                </Typography>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    mb: 3,
+                  }}
+                >
+                  או לחץ לבחירת קובץ מהמחשב
+                </Typography>
+
+                <Chip
+                  label="PNG, JPG, JPEG עד 10MB"
+                  variant="outlined"
+                  sx={{
+                    borderColor: alpha(theme.palette.primary.main, 0.3),
+                    color: theme.palette.text.secondary,
+                  }}
+                />
+              </Box>
+            ) : (
+              <Fade in={!!imagePreview}>
+                <Box sx={{ mb: 4 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "center",
+                      mb: 3,
+                      color: theme.palette.text.primary,
+                      fontWeight: 600,
+                    }}
+                  >
+                    תצוגה מקדימה של התמונה
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      mb: 3,
+                      borderRadius: 3,
+                      overflow: "hidden",
+                      border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                    }}
+                  >
+                    <img
+                      src={imagePreview || "/placeholder.svg"}
+                      alt="תצוגה מקדימה"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "400px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center" }}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setFile(null)
+                        setImagePreview(null)
+                        setUploadComplete(false)
+                      }}
+                      sx={{ borderRadius: 2 }}
+                    >
+                      בחר תמונה אחרת
+                    </Button>
+                  </Box>
+                </Box>
+              </Fade>
+            )}
 
             {/* Selected File Info */}
             {file && (
@@ -534,7 +443,7 @@ const FileUploader = () => {
             )}
 
             {/* Action Buttons */}
-            <Stack direction="row" spacing={2} justifyContent="center">
+            <Stack direction="row" justifyContent="space-between" >
               <Button
                 variant="outlined"
                 onClick={() => navigate(`/albums/${albumId}`)}
@@ -557,6 +466,7 @@ const FileUploader = () => {
                   borderRadius: 2,
                   px: 6,
                   py: 1.5,
+                  gap: 0.75, // הוספת רווח בין האייקון לטקסט
                   background: uploadComplete
                     ? `linear-gradient(45deg, ${theme.palette.success.main}, ${theme.palette.success.light})`
                     : `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -576,6 +486,6 @@ const FileUploader = () => {
     </Box>
   )
 }
-
 export default FileUploader
+
 

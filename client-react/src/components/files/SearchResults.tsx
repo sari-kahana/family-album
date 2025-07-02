@@ -1,58 +1,3 @@
-// import { useEffect, useState } from 'react';
-// import { useSearchParams } from 'react-router-dom';
-// import { Image } from '../../Types';
-// import axiosInstance from '../axiosInstance';
-
-// const SearchResults = () => {
-//     const [searchParams] = useSearchParams();
-//     const [results, setResults] = useState([]);
-//     const [loading, setLoading] = useState(true);
-//     const query = searchParams.get('query');
-
-//     useEffect(() => {
-//         if (query)
-//             fetchResults();
-//     }, [query]);
-
-//     const fetchResults = async () => {
-//         try {
-//             const response = await axiosInstance.get(`/Image/search?query=${encodeURIComponent(query || '')}`);
-//             setResults(response.data);
-//         } catch (error) {
-//             console.error('Search error:', error);
-//             setResults([]);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <h2>תוצאות חיפוש עבור: {query}</h2>
-//             {loading ? (
-//                 <p>טוען...</p>
-//             ) : results.length === 0 ? (
-//                 <p>לא נמצאו תוצאות</p>
-//             ) : (
-//                 <ul>
-//                     {results.map((img : Image) => (
-//                         <li key={img.id}>
-//                             <img src={img.s3URL} alt={img.name} width={200} />
-//                             <p>{img.name}</p>
-//                         </li>
-//                     ))}
-//                 </ul>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default SearchResults;
-
-
-
-"use client"
-
 import { useEffect, useState } from "react"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import type { Image } from "../../Types"
@@ -68,7 +13,6 @@ import {
   Chip,
   CircularProgress,
   alpha,
-  useTheme,
   IconButton,
   Stack,
   Button,
@@ -85,13 +29,14 @@ import {
   Favorite,
   FavoriteBorder,
   Download,
-  Share,
+  ArrowForward,
   ArrowBack,
+  Close,
 } from "@mui/icons-material"
 import SearchImages from "./SearchImages"
+import theme from "../Theme"
 
 const SearchResults = () => {
-  const theme = useTheme()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const [results, setResults] = useState<Image[]>([])
@@ -100,6 +45,7 @@ const SearchResults = () => {
   const [favorites, setFavorites] = useState<Set<number>>(new Set())
   const [selectedImage, setSelectedImage] = useState<Image | null>(null)
   const [openImageModal, setOpenImageModal] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const query = searchParams.get("query")
 
   useEffect(() => {
@@ -108,8 +54,13 @@ const SearchResults = () => {
 
   const fetchResults = async () => {
     setLoading(true)
+    const token = localStorage.getItem("token")
     try {
-      const response = await axiosInstance.get(`/Image/search?query=${encodeURIComponent(query || "")}`)
+      const response = await axiosInstance.get(`/Image/search?query=${encodeURIComponent(query || "")}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       setResults(response.data)
     } catch (error) {
       console.error("Search error:", error)
@@ -130,8 +81,22 @@ const SearchResults = () => {
   }
 
   const handleImageClick = (image: Image) => {
+    const index = results.findIndex((img) => img.id === image.id)
+    setCurrentImageIndex(index)
     setSelectedImage(image)
     setOpenImageModal(true)
+  }
+
+  const handlePrevImage = () => {
+    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : results.length - 1
+    setCurrentImageIndex(prevIndex)
+    setSelectedImage(results[prevIndex])
+  }
+
+  const handleNextImage = () => {
+    const nextIndex = currentImageIndex < results.length - 1 ? currentImageIndex + 1 : 0
+    setCurrentImageIndex(nextIndex)
+    setSelectedImage(results[nextIndex])
   }
 
   if (loading) {
@@ -146,6 +111,7 @@ const SearchResults = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          direction: "rtl",
         }}
       >
         <Box sx={{ textAlign: "center" }}>
@@ -157,7 +123,7 @@ const SearchResults = () => {
             }}
           />
           <Typography variant="h6" color="text.secondary">
-            מחפש תמונות...
+            ...מחפש תמונות
           </Typography>
         </Box>
       </Box>
@@ -172,19 +138,31 @@ const SearchResults = () => {
           theme.palette.secondary.main,
           0.05,
         )} 100%)`,
-        py: 4,
+        pt: 12,
+        pb: 4,
+        direction: "rtl",
       }}
     >
       <Container maxWidth="xl">
         {/* Header */}
         <Box sx={{ mb: 4 }}>
-          <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 3 }}>
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            sx={{
+              mb: 3,
+              direction: "rtl",
+              "& .MuiBreadcrumbs-separator": {
+                mx: 0.5, 
+              },
+            }}
+          >
             <Button
-              startIcon={<ArrowBack />}
+              startIcon={<ArrowForward />}
               onClick={() => navigate(-1)}
               sx={{
                 color: theme.palette.text.secondary,
                 textTransform: "none",
+                gap: 0.5, 
                 "&:hover": {
                   backgroundColor: alpha(theme.palette.primary.main, 0.05),
                 },
@@ -200,7 +178,7 @@ const SearchResults = () => {
                 fontWeight: 600,
               }}
             >
-              <SearchIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <SearchIcon sx={{ ml: 0.5 }} fontSize="small" />
               תוצאות חיפוש
             </Typography>
           </Breadcrumbs>
@@ -215,7 +193,7 @@ const SearchResults = () => {
               mb: 3,
             }}
           >
-            <Box>
+            <Box sx={{ textAlign: "right" }}>
               <Typography
                 variant="h4"
                 sx={{
@@ -227,7 +205,7 @@ const SearchResults = () => {
                   mb: 1,
                 }}
               >
-                תוצאות חיפוש עבור "{query}"
+                {`תוצאות חיפוש עבור "${query}"`}
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 נמצאו {results.length} תמונות
@@ -247,25 +225,6 @@ const SearchResults = () => {
               gap: 2,
             }}
           >
-            <Stack direction="row" spacing={1}>
-              <Chip
-                label={`${results.length} תוצאות`}
-                variant="outlined"
-                sx={{
-                  borderColor: alpha(theme.palette.primary.main, 0.3),
-                  color: theme.palette.primary.main,
-                }}
-              />
-              <Chip
-                label="כל הקטגוריות"
-                variant="filled"
-                sx={{
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  color: theme.palette.primary.main,
-                }}
-              />
-            </Stack>
-
             <Stack direction="row" spacing={1}>
               <IconButton
                 onClick={() => setViewMode("grid")}
@@ -342,6 +301,7 @@ const SearchResults = () => {
                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       position: "relative",
                       display: viewMode === "list" ? "flex" : "block",
+                      flexDirection: viewMode === "list" ? "row-reverse" : "column",
                       "&:hover": {
                         transform: "translateY(-8px) scale(1.02)",
                         boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
@@ -360,6 +320,7 @@ const SearchResults = () => {
                       sx={{
                         height: "100%",
                         display: viewMode === "list" ? "flex" : "block",
+                        flexDirection: viewMode === "list" ? "row-reverse" : "column",
                       }}
                     >
                       <Box
@@ -409,16 +370,6 @@ const SearchResults = () => {
                             >
                               <Download />
                             </IconButton>
-                            <IconButton
-                              size="small"
-                              sx={{ color: "white", backgroundColor: "rgba(255,255,255,0.2)" }}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                // Handle share
-                              }}
-                            >
-                              <Share />
-                            </IconButton>
                           </Stack>
                         </Box>
 
@@ -427,7 +378,7 @@ const SearchResults = () => {
                           sx={{
                             position: "absolute",
                             top: 8,
-                            right: 8,
+                            left: 8, 
                             backgroundColor: "rgba(255,255,255,0.9)",
                             "&:hover": {
                               backgroundColor: "rgba(255,255,255,1)",
@@ -450,6 +401,7 @@ const SearchResults = () => {
                         sx={{
                           p: viewMode === "list" ? 2 : 3,
                           flex: viewMode === "list" ? 1 : "none",
+                          textAlign: "right",
                         }}
                       >
                         <Typography
@@ -460,6 +412,7 @@ const SearchResults = () => {
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
                             mb: 1,
+                            textAlign: "right",
                           }}
                         >
                           {image.name}
@@ -476,13 +429,14 @@ const SearchResults = () => {
                               display: "-webkit-box",
                               WebkitLineClamp: 2,
                               WebkitBoxOrient: "vertical",
+                              textAlign: "right",
                             }}
                           >
-                           { image.description || "אין תיאור זמין"}
+                            {image.description || "אין תיאור זמין"}
                           </Typography>
                         )}
 
-                        <Stack direction="row" spacing={1} flexWrap="wrap">
+                        <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
                           <Chip
                             label="JPG"
                             size="small"
@@ -519,31 +473,106 @@ const SearchResults = () => {
             <Box
               sx={{
                 position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "90%",
-                height: "90%",
-                background: "rgba(0, 0, 0, 0.9)",
-                borderRadius: 4,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(0, 0, 0, 0.95)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 p: 2,
               }}
-              onClick={() => setOpenImageModal(false)}
             >
-              {selectedImage && (
-                <img
-                  src={selectedImage.s3URL || "/placeholder.svg"}
-                  alt={selectedImage.name}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    objectFit: "contain",
-                    borderRadius: "8px",
+              {/* Close Button */}
+              <IconButton
+                onClick={() => setOpenImageModal(false)}
+                sx={{
+                  position: "absolute",
+                  top: 20,
+                  right: 20,
+                  color: "white",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                  },
+                  zIndex: 1,
+                }}
+              >
+                <Close />
+              </IconButton>
+
+              {/* Previous Button */}
+              {results.length > 1 && (
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{
+                    position: "absolute",
+                    left: 20,
+                    color: "white",
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.2)",
+                    },
+                    zIndex: 1,
                   }}
-                />
+                >
+                  <ArrowBack />
+                </IconButton>
+              )}
+
+              {/* Next Button */}
+              {results.length > 1 && (
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{
+                    position: "absolute",
+                    right: 20,
+                    color: "white",
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.2)",
+                    },
+                    zIndex: 1,
+                  }}
+                >
+                  <ArrowForward />
+                </IconButton>
+              )}
+
+              {/* Image */}
+              {selectedImage && (
+                <Box sx={{ textAlign: "center", maxWidth: "90%", maxHeight: "90%" }}>
+                  <img
+                    src={selectedImage.s3URL || "/placeholder.svg"}
+                    alt={selectedImage.name}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "80vh",
+                      objectFit: "contain",
+                      borderRadius: "8px",
+                    }}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "white",
+                      mt: 2,
+                      textAlign: "center",
+                    }}
+                  >
+                    {selectedImage.name}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "rgba(255,255,255,0.7)",
+                      textAlign: "center",
+                    }}
+                  >
+                    {currentImageIndex + 1} מתוך {results.length}
+                  </Typography>
+                </Box>
               )}
             </Box>
           </Fade>

@@ -1,8 +1,10 @@
 import { createTheme } from "@mui/material/styles"
 
 const theme = createTheme({
+  direction: "rtl",
   typography: {
-    fontFamily: '"Inter", "SF Pro Display", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
+    fontFamily:
+      '"Heebo", "Rubik", "Assistant", "Inter", "SF Pro Display", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
     h1: {
       fontWeight: 800,
       letterSpacing: "-0.025em",
@@ -190,6 +192,32 @@ const theme = createTheme({
         },
       },
     },
+    // RTL-specific overrides
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          direction: "rtl",
+          textAlign: "right",
+        },
+        input: {
+          textAlign: "right",
+          "&::placeholder": {
+            textAlign: "right",
+            direction: "rtl",
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiInputBase-input": {
+            textAlign: "right",
+            direction: "rtl",
+          },
+        },
+      },
+    },
   },
   breakpoints: {
     values: {
@@ -203,6 +231,4 @@ const theme = createTheme({
 })
 
 export default theme
-
-
 

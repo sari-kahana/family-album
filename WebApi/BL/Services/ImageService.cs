@@ -165,7 +165,7 @@ namespace BL.Services
                     throw new ArgumentException("Image URL cannot be null or empty");
                 }
 
-                string prompt = $"תאר את התמונה הבאה ותכלול מילות מפתח שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
+                string prompt = $"תאר את התמונה הבאה תיאור תמציתי שיכלול מילות מפתח נפוצות שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 

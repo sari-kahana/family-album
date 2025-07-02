@@ -42,6 +42,15 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> AddImage([FromBody] Image img)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                Console.WriteLine("errrrrrrror");
+                return Unauthorized();
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+            img.UserId = userId;
             await _imageService.AddImageAsync(img);
             return CreatedAtAction(nameof(GetImageById), new { id = img.Id }, img);
         }
@@ -84,6 +93,9 @@ namespace WebApi.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             var images = await _imageService.SearchImagesAsync(cleaned , userId);
+            Console.WriteLine($"Query: {query}");
+            Console.WriteLine($"UserId: {userId}");
+            Console.WriteLine($"Found images: {images.Count}");
 
             return Ok(images);
         }

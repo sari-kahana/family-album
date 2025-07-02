@@ -40,6 +40,6 @@ a:hover {
 }
 
 /* RTL Support */
-[dir="ltr"] {
-  text-align: left;
+[dir="rtl"] {
+  text-align: right;
 }

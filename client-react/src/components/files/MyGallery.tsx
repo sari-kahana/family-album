@@ -18,32 +18,35 @@ import {
   CardMedia,
   Fade,
   alpha,
-  useTheme,
   Stack,
   Chip,
   Paper,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material"
 import {
   Delete as DeleteIcon,
   CloudUpload,
   Image as ImageIcon,
-  ArrowBack,
+  ArrowForward,
   Edit as EditIcon,
   Fullscreen,
   Download,
-  Share,
+  AutoAwesome, 
   Favorite,
   FavoriteBorder,
-  ArrowForward,
+  ArrowBack,
   Close,
 } from "@mui/icons-material"
 import { useNavigate, useParams } from "react-router-dom"
 import axiosInstance from "../axiosInstance"
 import SearchImages from "./SearchImages"
+import theme from "../Theme"
 
 const MyGallery = () => {
-  const theme = useTheme()
   const { id } = useParams<{ id: string }>()
   const albumId = Number.parseInt(id || "0")
   const navigate = useNavigate()
@@ -70,6 +73,10 @@ const MyGallery = () => {
   const [updateLoading, setUpdateLoading] = useState(false)
   const [deleteImageLoading, setDeleteImageLoading] = useState<number | null>(null)
   const [downloadLoading, setDownloadLoading] = useState<number | null>(null)
+
+  // הוסף state חדש לדיאלוג התיאור
+  const [descriptionDialogOpen, setDescriptionDialogOpen] = useState(false)
+  const [selectedImageForDescription, setSelectedImageForDescription] = useState<Image | null>(null)
 
   useEffect(() => {
     getAlbumName()
@@ -274,6 +281,12 @@ const MyGallery = () => {
     setFavorites(newFavorites)
   }
 
+  // הוסף פונקציה חדשה להצגת תיאור התמונה
+  const handleShowDescription = (image: Image) => {
+    setSelectedImageForDescription(image)
+    setDescriptionDialogOpen(true)
+  }
+
   const getAlbumName = async () => {
     try {
       const response = await axiosInstance.get(`/album/${albumId}`, {
@@ -316,7 +329,9 @@ const MyGallery = () => {
             variant="h4"
             sx={{
               fontWeight: 500,
-              background: theme.palette.primary.main/*`linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`*/,
+              background:
+                theme.palette.primary
+                  .main /*`linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`*/,
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -327,20 +342,6 @@ const MyGallery = () => {
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
-            <Button
-              startIcon={<ArrowBack />}
-              onClick={() => navigate("/albums")}
-              variant="outlined"
-              sx={{
-                borderRadius: 2,
-                borderColor: alpha(theme.palette.primary.main, 0.3),
-              }}
-            >
-              חזרה לאלבומים
-            </Button>
-
-            <SearchImages />
-
             <Button
               variant="contained"
               startIcon={<CloudUpload />}
@@ -359,6 +360,24 @@ const MyGallery = () => {
               }}
             >
               העלאת תמונה
+            </Button>
+
+            <Box>
+              {" "}
+              {/* בצד שמאל */}
+              <SearchImages />
+            </Box>
+
+            <Button
+              endIcon={<ArrowForward />}
+              onClick={() => navigate("/albums")}
+              variant="outlined"
+              sx={{
+                borderRadius: 2,
+                borderColor: alpha(theme.palette.primary.main, 0.3),
+              }}
+            >
+              חזרה לאלבומים
             </Button>
           </Box>
         </Box>
@@ -484,7 +503,7 @@ const MyGallery = () => {
                               sx={{ color: "white", backgroundColor: "rgba(255,255,255,0.2)" }}
                               onClick={(e) => {
                                 e.stopPropagation()
-                                // Handle fullscreen
+                                handleImageClick(image)
                               }}
                             >
                               <Fullscreen />
@@ -505,15 +524,16 @@ const MyGallery = () => {
                                 <Download />
                               )}
                             </IconButton>
+                            {/* החלפת אייקון השיתוף באייקון AI */}
                             <IconButton
                               size="small"
                               sx={{ color: "white", backgroundColor: "rgba(255,255,255,0.2)" }}
                               onClick={(e) => {
                                 e.stopPropagation()
-                                // Handle share
+                                handleShowDescription(image)
                               }}
                             >
-                              <Share />
+                              <AutoAwesome />
                             </IconButton>
                           </Stack>
                         </Box>
@@ -886,6 +906,99 @@ const MyGallery = () => {
             </Box>
           </Fade>
         </Modal>
+
+        {/* Description Dialog */}
+        <Dialog
+          open={descriptionDialogOpen}
+          onClose={() => setDescriptionDialogOpen(false)}
+          maxWidth="sm"
+          fullWidth
+          sx={{
+            "& .MuiDialog-paper": {
+              borderRadius: 4,
+              background: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(20px)",
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            },
+          }}
+        >
+          <DialogTitle
+            sx={{
+              textAlign: "center",
+              fontWeight: 700,
+              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              pb: 1,
+            }}
+          >
+          ✨ AI תיאור התמונה עם  ✨
+          </DialogTitle>
+          <DialogContent sx={{ pt: 2 }}>
+            {selectedImageForDescription && (
+              <Box sx={{ textAlign: "center" }}>
+                <Box
+                  sx={{
+                    mb: 3,
+                    borderRadius: 3,
+                    overflow: "hidden",
+                    border: `2px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                    display: "inline-block",
+                  }}
+                >
+                  <img
+                    src={selectedImageForDescription.s3URL || "/placeholder.svg"}
+                    alt={selectedImageForDescription.name}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "200px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 600,
+                    mb: 2,
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  {selectedImageForDescription.name}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    lineHeight: 1.6,
+                    textAlign: "right",
+                    direction: "rtl",
+                  }}
+                >
+                  {selectedImageForDescription.description || "תיאור AI עדיין לא זמין עבור תמונה זו."}
+                </Typography>
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ justifyContent: "center", pb: 3 }}>
+            <Button
+              onClick={() => setDescriptionDialogOpen(false)}
+              variant="contained"
+              sx={{
+                borderRadius: 2,
+                px: 4,
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                "&:hover": {
+                  background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                },
+              }}
+            >
+              סגור
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         {/* Success/Error Snackbar */}
         <Box
           sx={{
@@ -943,3 +1056,5 @@ const MyGallery = () => {
   )
 }
 export default MyGallery
+
+

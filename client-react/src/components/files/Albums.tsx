@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
   alpha,
-  useTheme,
   Fade,
   Stack,
   Chip,
@@ -36,25 +35,27 @@ import {
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../axiosInstance"
 import SearchImages from "../files/SearchImages"
+import theme from "../Theme"
 
 const Albums = () => {
-  const theme = useTheme()
   const [albums, dispatch] = useReducer(albumReducer, initialAlbumsState)
   const [, setSelectedAlbumId] = useState<number | null>(null)
   const [open, setOpen] = useState(false)
-  const [, setOpenRename] = useState(false)
+  const [openRename, setOpenRename] = useState(false)
   const albumName = useRef<HTMLInputElement>(null)
+  const renameAlbumName = useRef<HTMLInputElement>(null) // הוסף ref חדש לשינוי שם
   const navigate = useNavigate()
   let token = localStorage.getItem("token")
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [albumToDelete, setAlbumToDelete] = useState<Album | null>(null)
+  const [albumToRename, setAlbumToRename] = useState<Album | null>(null) // הוסף state לאלבום שצריך לשנות שם
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
-  // הוסף state חדש לloading של פעולות
   const [createLoading, setCreateLoading] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [renameLoading, setRenameLoading] = useState(false) // הוסף loading state לשינוי שם
 
   useEffect(() => {
     loadAlbums()
@@ -94,7 +95,55 @@ const Albums = () => {
     navigate(`/albums/${albumId}`)
   }
 
-  // עדכן את handleDelete
+  // הוסף פונקציה לטיפול בשינוי שם האלבום
+  const handleRename = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!albumToRename || !renameAlbumName.current?.value) return
+
+    setRenameLoading(true)
+
+    try {
+      const response = await axiosInstance.put(
+        `/album/${albumToRename.id}`,
+        JSON.stringify(renameAlbumName.current.value),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      )
+
+      console.log("Album renamed:", response.data)
+      dispatch({
+        type: "UPDATE_ALBUM",
+        payload: {
+          id: albumToRename.id,
+          name: renameAlbumName.current.value,
+        },
+      })
+
+      setSnackbarMessage("שם האלבום שונה בהצלחה!")
+      setSnackbarSeverity("success")
+      setSnackbarOpen(true)
+      setOpenRename(false)
+      setAlbumToRename(null)
+    } catch (error) {
+      console.error("Error renaming album:", error)
+      setSnackbarMessage("שגיאה בשינוי שם האלבום")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
+    } finally {
+      setRenameLoading(false)
+    }
+  }
+
+  // הוסף פונקציה לפתיחת מודל שינוי השם
+  const handleRenameClick = (album: Album) => {
+    setAlbumToRename(album)
+    setOpenRename(true)
+  }
+
   const handleDelete = async () => {
     if (!albumToDelete) return
     setDeleteLoading(true)
@@ -127,7 +176,6 @@ const Albums = () => {
     setDeleteDialogOpen(true)
   }
 
-  // עדכן את handleCreate
   const handleCreate = async (e: FormEvent) => {
     e.preventDefault()
     setCreateLoading(true)
@@ -154,7 +202,6 @@ const Albums = () => {
     }
   }
 
-  // פונקציה לפורמט תאריך
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString)
@@ -168,10 +215,8 @@ const Albums = () => {
     }
   }
 
-  // פונקציה לקבלת תמונת כיסוי
   const getCoverImage = (album: Album) => {
     if (album.images && album.images.length > 0) {
-      // נחפש תמונה עם s3URL תקין
       const validImage = album.images.find((img) => img && img.s3URL && img.s3URL.trim() !== "")
       return validImage?.s3URL || null
     }
@@ -207,7 +252,7 @@ const Albums = () => {
           >
             גלריית האלבומים שלי
           </Typography>
-          
+
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 4 }}>
             <SearchImages />
             <Button
@@ -363,7 +408,7 @@ const Albums = () => {
               }}
             />
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
-              טוען את האלבומים שלך...
+              ...טוען את האלבומים שלך
             </Typography>
             <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
               אנא המתן בזמן שאנחנו מביאים את האלבומים שלך
@@ -443,9 +488,9 @@ const Albums = () => {
                             background: coverImage
                               ? `url(${coverImage}) center/cover`
                               : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(
-                                  theme.palette.secondary.main,
-                                  0.05,
-                                )})`,
+                                theme.palette.secondary.main,
+                                0.05,
+                              )})`,
                             position: "relative",
                             overflow: "hidden",
                             "&::before": {
@@ -458,9 +503,9 @@ const Albums = () => {
                               background: coverImage
                                 ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
                                 : `radial-gradient(circle at 30% 70%, ${alpha(
-                                    theme.palette.primary.main,
-                                    0.1,
-                                  )} 0%, transparent 50%)`,
+                                  theme.palette.primary.main,
+                                  0.1,
+                                )} 0%, transparent 50%)`,
                             },
                           }}
                         >
@@ -537,8 +582,7 @@ const Albums = () => {
                           variant="contained"
                           onClick={(e) => {
                             e.stopPropagation()
-                            setSelectedAlbumId(album.id)
-                            setOpenRename(true)
+                            handleRenameClick(album) // עדכן את הקריאה לפונקציה החדשה
                           }}
                           sx={{
                             borderRadius: 3,
@@ -552,7 +596,7 @@ const Albums = () => {
                             },
                           }}
                         >
-                          עריכה
+                          שינוי שם
                         </Button>
                         <Button
                           startIcon={<DeleteIcon />}
@@ -645,7 +689,6 @@ const Albums = () => {
                     >
                       ביטול
                     </Button>
-                    {/* עדכן את כפתור יצירת האלבום במודל */}
                     <Button
                       variant="contained"
                       type="submit"
@@ -665,10 +708,107 @@ const Albums = () => {
                       {createLoading ? (
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                           <CircularProgress size={16} sx={{ color: "white" }} />
-                          יוצר אלבום...
+                          ...יוצר אלבום
                         </Box>
                       ) : (
                         "יצירת אלבום"
+                      )}
+                    </Button>
+                  </Stack>
+                </Stack>
+              </form>
+            </Box>
+          </Fade>
+        </Modal>
+
+        {/* Rename Album Modal*/}
+        <Modal open={openRename} onClose={() => setOpenRename(false)} closeAfterTransition>
+          <Fade in={openRename}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: { xs: "90%", sm: 500 },
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(20px)",
+                borderRadius: 4,
+                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                p: 4,
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 700,
+                  textAlign: "center",
+                  mb: 3,
+                  background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                שינוי שם האלבום
+              </Typography>
+
+              <form onSubmit={handleRename}>
+                <Stack spacing={3}>
+                  <TextField
+                    label="שם חדש לאלבום"
+                    required
+                    inputRef={renameAlbumName}
+                    fullWidth
+                    variant="outlined"
+                    defaultValue={albumToRename?.name || ""}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: 2,
+                        backgroundColor: alpha(theme.palette.primary.main, 0.02),
+                      },
+                    }}
+                  />
+
+                  <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setOpenRename(false)
+                        setAlbumToRename(null)
+                      }}
+                      sx={{
+                        borderRadius: 2,
+                        px: 4,
+                        borderColor: alpha(theme.palette.primary.main, 0.3),
+                      }}
+                    >
+                      ביטול
+                    </Button>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={renameLoading}
+                      sx={{
+                        borderRadius: 2,
+                        px: 4,
+                        background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                        "&:hover": {
+                          background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                        },
+                        "&:disabled": {
+                          background: alpha(theme.palette.primary.main, 0.3),
+                        },
+                      }}
+                    >
+                      {renameLoading ? (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <CircularProgress size={16} sx={{ color: "white" }} />
+                          ...משנה שם
+                        </Box>
+                      ) : (
+                        "שמור שינויים"
                       )}
                     </Button>
                   </Stack>
@@ -716,9 +856,9 @@ const Albums = () => {
                   color: theme.palette.text.primary,
                 }}
               >
-                האלבום "{albumToDelete?.name}" מכיל {albumToDelete?.images.length} תמונות.
+                .האלבום "{albumToDelete?.name}" מכיל {albumToDelete?.images.length} תמונות
                 <br />
-                האם אתה בטוח שברצונך למחוק את האלבום?
+                ?האם אתה בטוח שברצונך למחוק את האלבום
               </Typography>
 
               <Stack direction="row" spacing={2} justifyContent="center">
@@ -733,7 +873,6 @@ const Albums = () => {
                 >
                   ביטול
                 </Button>
-                {/* עדכן את כפתור מחיקת האלבום במודל המחיקה */}
                 <Button
                   variant="contained"
                   color="error"
@@ -753,7 +892,7 @@ const Albums = () => {
                   {deleteLoading ? (
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <CircularProgress size={16} sx={{ color: "white" }} />
-                      מוחק...
+                      ...מוחק
                     </Box>
                   ) : (
                     "מחק אלבום"
@@ -820,4 +959,5 @@ const Albums = () => {
     </Box>
   )
 }
+
 export default Albums

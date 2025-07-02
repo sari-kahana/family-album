@@ -31,10 +31,6 @@ namespace BL.Services
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Name, username)
-            //};
             var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Name == username);
 
             var claims = new List<Claim>
