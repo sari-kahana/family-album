@@ -202,55 +202,34 @@ const MyGallery = () => {
   }
 
   // עדכן את handleDownload
-  const handleDownload = async (imageUrl: string, imageName: string, imageId: number) => {
-    try {
-      setDownloadLoading(imageId)
+ const handleDownload = async (imageUrl: string, imageName: string, imageId: number) => {
+  try {
+    setDownloadLoading(imageId);
 
-      // יצירת קנבס להורדת התמונה
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
+    const response = await axiosInstance.get("/image/proxy", {
+      params: { url: imageUrl },
+      responseType: "blob",
+    });
 
-      if (!ctx) {
-        throw new Error("Could not get canvas context")
-      }
+    const blob = response.data;
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = imageName || "image.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
 
-      // יצירת אלמנט תמונה
-      const img = new Image()
-      img.crossOrigin = "anonymous"
-
-      await new Promise((resolve, reject) => {
-        img.onload = () => {
-          // הגדרת גודל הקנבס לפי גודל התמונה
-          canvas.width = img.width
-          canvas.height = img.height
-
-          // ציור התמונה על הקנבס
-          ctx.drawImage(img, 0, 0)
-
-          // הורדת התמונה
-          const dataUrl = canvas.toDataURL("image/png")
-          const link = document.createElement("a")
-          link.download = imageName || "image.png"
-          link.href = dataUrl
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-
-          resolve(true)
-        }
-        img.onerror = reject
-        img.src = imageUrl
-      })
-
-      console.log("התמונה הורדה בהצלחה!")
-    } catch (error) {
-      console.error("Error downloading image:", error)
-      // fallback - פתיחה בטאב חדש
-      window.open(imageUrl, "_blank")
-    } finally {
-      setDownloadLoading(null)
-    }
+    console.log("✅ התמונה הורדה בהצלחה!");
+  } catch (error) {
+    console.error("Error downloading image:", error);
+    window.open(imageUrl, "_blank");
+  } finally {
+    setDownloadLoading(null);
   }
+};
+
 
   const handleImageClick = (image: Image) => {
     const index = images.findIndex((img) => img.id === image.id)

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect, useRef, useCallback } from "react"
 import {
   Box,
@@ -41,21 +39,8 @@ import {
   Download as DownloadIcon,
 } from "@mui/icons-material"
 import axiosInstance from "../axiosInstance"
-
-// Types
-interface Image {
-  id: number
-  name: string
-  s3URL: string
-  albumId?: number
-  ownerId?: number
-}
-
-interface Album {
-  id: number
-  name: string
-  images: Image[]
-}
+import type { Album, Image } from "../../Types"
+import theme from "../Theme"
 
 // תבניות קולאז' מוגדרות מראש
 const collageTemplates = [
@@ -139,51 +124,10 @@ const Collages = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
   const [mounted, setMounted] = useState(false)
-  const [imageCache, setImageCache] = useState<Map<string, string>>(new Map())
 
   const collageRef = useRef<HTMLDivElement>(null)
   const token = localStorage.getItem("token")
 
-  // פונקציה להמרת תמונה ל-Base64 כדי לפתור בעיות CORS
-  const convertImageToBase64 = useCallback(
-    async (imageUrl: string): Promise<string> => {
-      // בדיקה אם התמונה כבר בקאש
-      if (imageCache.has(imageUrl)) {
-        return imageCache.get(imageUrl)!
-      }
-
-      try {
-        // יצירת פרוקסי URL כדי לעקוף CORS
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(imageUrl)}`
-
-        const response = await fetch(proxyUrl)
-        if (!response.ok) {
-          throw new Error("Failed to fetch image")
-        }
-
-        const blob = await response.blob()
-
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = () => {
-            const base64 = reader.result as string
-            // שמירה בקאש
-            setImageCache((prev) => new Map(prev).set(imageUrl, base64))
-            resolve(base64)
-          }
-          reader.onerror = reject
-          reader.readAsDataURL(blob)
-        })
-      } catch (error) {
-        console.error("Error converting image to base64:", error)
-        // במקרה של שגיאה, נחזיר placeholder
-        return "/placeholder.svg?height=200&width=200"
-      }
-    },
-    [imageCache],
-  )
-
-  // טעינת האלבומים בעת טעינת הקומפוננטה
   useEffect(() => {
     setMounted(true)
     loadAlbums()
@@ -250,117 +194,142 @@ const Collages = () => {
     [albums],
   )
 
-  // פונקציה ליצירת קנבס עם התמונות
   const createCollageCanvas = useCallback(async (): Promise<HTMLCanvasElement> => {
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-    if (!ctx) {
-      throw new Error("Could not get canvas context")
-    }
+    if (!ctx) throw new Error("Could not get canvas context");
 
-    // הגדרת גודל הקנבס
-    canvas.width = 800
-    canvas.height = 600
+    canvas.width = 800;
+    canvas.height = 600;
+    const { layout, rows = 1, cols = 1 } = selectedTemplate;
+    ctx.fillStyle = selectedBackground.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // ציור הרקע
-    if (selectedBackground.type === "color") {
-      ctx.fillStyle = selectedBackground.color
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-    }
+    try {
+      // 🚀 הורדה ישירות מהקליינט ב-Parallel
+      const response = await axiosInstance.post("/image/proxy/batch", selectedImages.map(img => img.s3URL));
+      const images = response.data;
 
-    // חישוב מיקומי התמונות בהתאם לתבנית
-    const { layout, rows, cols } = selectedTemplate
-    const cellWidth = canvas.width / (cols || 1)
-    const cellHeight = canvas.height / (rows || 1)
-
-    // טעינת התמונות וציורן על הקנבס
-    for (let i = 0; i < selectedImages.length; i++) {
-      const image = selectedImages[i]
-
-      try {
-        // המרת התמונה ל-Base64
-        const base64Image = await convertImageToBase64(image.s3URL)
-
-        // יצירת אלמנט תמונה
-        const img = new Image()
-
-        await new Promise((resolve, reject) => {
-          img.onload = resolve
-          img.onerror = reject
-          img.src = base64Image
+      const bitmaps = await Promise.all(
+        images.map(async (img: { dataUrl: string }) => {
+          const blob = await (await fetch(img.dataUrl)).blob();
+          return createImageBitmap(blob);
         })
+      );
 
-        // חישוב מיקום התמונה
-        let x, y, width, height
+      // 🎨 ציור התמונות על הקנבס
+      bitmaps.forEach((bitmap, i) => {
+        let x, y, width, height;
 
         if (layout === "grid") {
-          const row = Math.floor(i / (cols || 1))
-          const col = i % (cols || 1)
-          x = col * cellWidth + spacing
-          y = row * cellHeight + spacing
-          width = cellWidth - spacing * 2
-          height = cellHeight - spacing * 2
-        } else {
-          // תבניות מותאמות אישית
-          x = (i % 3) * (canvas.width / 3) + spacing
-          y = Math.floor(i / 3) * (canvas.height / 3) + spacing
-          width = canvas.width / 3 - spacing * 2
-          height = canvas.height / 3 - spacing * 2
-        }
-
-        // ציור התמונה עם עיגול פינות אם נדרש
-        if (borderRadius > 0) {
-          ctx.save()
-          ctx.beginPath()
-          ctx.roundRect(x, y, width, height, borderRadius)
-          ctx.clip()
-        }
-
-        ctx.drawImage(img, x, y, width, height)
-
-        if (borderRadius > 0) {
-          ctx.restore()
-        }
-
-        // ציור מסגרת אם נדרש
-        if (selectedBorderColor.color !== "transparent" && borderWidth > 0) {
-          ctx.strokeStyle = selectedBorderColor.color
-          ctx.lineWidth = borderWidth
-          if (borderRadius > 0) {
-            ctx.beginPath()
-            ctx.roundRect(x, y, width, height, borderRadius)
-            ctx.stroke()
+          const cellWidth = canvas.width / cols;
+          const cellHeight = canvas.height / rows;
+          const row = Math.floor(i / cols);
+          const col = i % cols;
+          x = col * cellWidth + spacing;
+          y = row * cellHeight + spacing;
+          width = cellWidth - spacing * 2;
+          height = cellHeight - spacing * 2;
+        } else if (layout === "mosaic") {
+          const positions = [
+            { x: spacing, y: spacing, width: canvas.width * 0.6 - spacing * 2, height: canvas.height * 0.6 - spacing * 2 },
+            { x: canvas.width * 0.6 + spacing, y: spacing, width: canvas.width * 0.4 - spacing * 2, height: canvas.height * 0.3 - spacing },
+            { x: canvas.width * 0.6 + spacing, y: canvas.height * 0.3 + spacing, width: canvas.width * 0.4 - spacing * 2, height: canvas.height * 0.3 - spacing },
+            { x: spacing, y: canvas.height * 0.6 + spacing, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.4 - spacing * 2 },
+            { x: canvas.width * 0.3 + spacing, y: canvas.height * 0.6 + spacing, width: canvas.width * 0.7 - spacing * 2, height: canvas.height * 0.4 - spacing * 2 },
+          ];
+          const pos = positions[i] || positions[0];
+          x = pos.x;
+          y = pos.y;
+          width = pos.width;
+          height = pos.height;
+        } else if (layout === "panorama") {
+          if (i === 0) {
+            x = spacing;
+            y = spacing;
+            width = canvas.width - spacing * 2;
+            height = canvas.height * 0.5 - spacing * 1.5;
           } else {
-            ctx.strokeRect(x, y, width, height)
+            const cellWidth = canvas.width / 2;
+            x = (i - 1) * cellWidth + spacing;
+            y = canvas.height * 0.5 + spacing * 0.5;
+            width = cellWidth - spacing * 2;
+            height = canvas.height * 0.5 - spacing * 1.5;
+          }
+        } else if (layout === "heart") {
+          const positions = [
+            { x: spacing, y: spacing, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.33 - spacing },
+            { x: canvas.width * 0.35, y: spacing, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.33 - spacing },
+            { x: canvas.width * 0.7, y: spacing, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.33 - spacing },
+            { x: canvas.width * 0.15, y: canvas.height * 0.33, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.33 - spacing },
+            { x: canvas.width * 0.55, y: canvas.height * 0.33, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.33 - spacing },
+            { x: canvas.width * 0.35, y: canvas.height * 0.66, width: canvas.width * 0.3 - spacing, height: canvas.height * 0.34 - spacing },
+          ];
+          const pos = positions[i] || positions[0];
+          x = pos.x;
+          y = pos.y;
+          width = pos.width;
+          height = pos.height;
+        } else {
+          const cellWidth = canvas.width / 3;
+          const cellHeight = canvas.height / 3;
+          x = (i % 3) * cellWidth + spacing;
+          y = Math.floor(i / 3) * cellHeight + spacing;
+          width = cellWidth - spacing * 2;
+          height = cellHeight - spacing * 2;
+        }
+
+        ctx.save();
+
+        if (borderRadius > 0) {
+          ctx.beginPath();
+          ctx.roundRect(x, y, width, height, borderRadius);
+          ctx.clip();
+        }
+
+        const imgAspect = bitmap.width / bitmap.height;
+        const cellAspect = width / height;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
+
+        if (imgAspect > cellAspect) {
+          drawHeight = height;
+          drawWidth = height * imgAspect;
+          offsetX = x - (drawWidth - width) / 2;
+          offsetY = y;
+        } else {
+          drawWidth = width;
+          drawHeight = width / imgAspect;
+          offsetX = x;
+          offsetY = y - (drawHeight - height) / 2;
+        }
+
+        ctx.drawImage(bitmap, offsetX, offsetY, drawWidth, drawHeight);
+        ctx.restore();
+
+        if (selectedBorderColor.color !== "transparent" && borderWidth > 0) {
+          ctx.strokeStyle = selectedBorderColor.color;
+          ctx.lineWidth = borderWidth;
+          if (borderRadius > 0) {
+            ctx.beginPath();
+            ctx.roundRect(x, y, width, height, borderRadius);
+            ctx.stroke();
+          } else {
+            ctx.strokeRect(x, y, width, height);
           }
         }
-      } catch (error) {
-        console.error(`Error loading image ${i}:`, error)
-        // ציור placeholder במקרה של שגיאה
-        ctx.fillStyle = "#f0f0f0"
-        ctx.fillRect(
-          (i % (cols||1)) * cellWidth + spacing,
-          Math.floor(i / (cols||1)) * cellHeight + spacing,
-          cellWidth - spacing * 2,
-          cellHeight - spacing * 2,
-        )
-      }
+      });
+    } catch (err) {
+      console.error("Error loading images for collage:", err);
+      ctx.fillStyle = "#f0f0f0";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    return canvas
-  }, [
-    selectedImages,
-    selectedTemplate,
-    selectedBackground,
-    selectedBorderColor,
-    borderWidth,
-    borderRadius,
-    spacing,
-    convertImageToBase64,
-  ])
+    return canvas;
+  }, [selectedImages, selectedTemplate, selectedBackground]);
 
-  // פונקציה לשמירת הקולאז'
+  // פונקציה לשמירת הקולאז' - תוקנה
   const handleSaveCollage = useCallback(async () => {
     if (!collageName.trim()) {
       showSnackbar("נא להזין שם לקולאז'", "error")
@@ -370,21 +339,23 @@ const Collages = () => {
     try {
       setLoading(true)
 
-      // יצירת הקנבס
       const canvas = await createCollageCanvas()
 
-      // המרת הקנבס ל-Blob
       const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (blob) {
-            resolve(blob)
-          } else {
-            reject(new Error("Failed to create blob"))
-          }
-        }, "image/png")
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob)
+            } else {
+              reject(new Error("Failed to create blob"))
+            }
+          },
+          "image/jpeg",
+          0.8,
+        )
       })
 
-      const file = new File([blob], `${collageName}.png`, { type: "image/png" })
+      const file = new File([blob], `${collageName}.png`, { type: "image/jpeg" })
 
       // העלאה לשרת
       const response = await axiosInstance.get("/upload/presigned-url", {
@@ -422,26 +393,27 @@ const Collages = () => {
       setSaveDialogOpen(false)
       setCollageName("")
       showSnackbar("הקולאז' נשמר בהצלחה!", "success")
+
+      // רענון האלבומים
+      loadAlbums()
     } catch (error) {
       console.error("שגיאה בשמירת הקולאז':", error)
       showSnackbar("שגיאה בשמירת הקולאז'", "error")
     } finally {
       setLoading(false)
     }
-  }, [collageName, currentAlbum, token, showSnackbar, createCollageCanvas])
+  }, [collageName, currentAlbum, token, showSnackbar, createCollageCanvas, loadAlbums])
 
-  // פונקציה להורדת הקולאז' כתמונה
   const handleDownloadCollage = useCallback(async () => {
     try {
       setLoading(true)
 
-      // יצירת הקנבס
       const canvas = await createCollageCanvas()
 
       // הורדת התמונה
-      const dataUrl = canvas.toDataURL("image/png")
+      const dataUrl = canvas.toDataURL("image/png", 1.0)
       const link = document.createElement("a")
-      link.download = "collage.png"
+      link.download = `collage-${Date.now()}.png`
       link.href = dataUrl
       document.body.appendChild(link)
       link.click()
@@ -456,7 +428,6 @@ const Collages = () => {
     }
   }, [showSnackbar, createCollageCanvas])
 
-  // פונקציה להסרת תמונה מהקולאז'
   const handleRemoveImage = useCallback((index: number) => {
     setSelectedImages((prev) => {
       const newSelectedImages = [...prev]
@@ -465,15 +436,13 @@ const Collages = () => {
     })
   }, [])
 
-  // פונקציה לסגירת הדיאלוג
   const handleCloseDialog = useCallback(() => {
     setSaveDialogOpen(false)
     setCollageName("")
   }, [])
 
-  // רינדור של תבנית הקולאז' בהתאם לסוג שנבחר
   const renderCollageTemplate = useCallback(() => {
-    const { layout, rows, cols } = selectedTemplate
+    const { layout, rows = 1, cols = 1 } = selectedTemplate
 
     const backgroundStyle =
       selectedBackground.type === "color"
@@ -522,7 +491,6 @@ const Collages = () => {
               alt={selectedImages[index].name}
               style={imageStyle}
               onError={(e) => {
-                // במקרה של שגיאה, נציג placeholder
                 const target = e.target as HTMLImageElement
                 target.src = "/placeholder.svg?height=200&width=200"
               }}
@@ -561,9 +529,9 @@ const Collages = () => {
       case "grid":
         return (
           <Box ref={collageRef} sx={collageStyle}>
-            <Grid container spacing={spacing / 8} sx={{ height: "100%" }}>
-              {Array.from({ length: rows||1 * (cols ||1) }).map((_, index) => (
-                <Grid item xs={12 / (cols||1)} key={index} sx={{ height: `${100 / (rows||1)}%` }}>
+            <Grid container spacing={spacing / 8} sx={{ height: "100%", width: "100%" }}>
+              {Array.from({ length: rows * cols }).map((_, index) => (
+                <Grid item xs={12 / cols} key={index} sx={{ height: `${100 / rows}%` }}>
                   {renderImageCell(index)}
                 </Grid>
               ))}
@@ -574,11 +542,11 @@ const Collages = () => {
       case "mosaic":
         return (
           <Box ref={collageRef} sx={collageStyle}>
-            <Grid container spacing={spacing / 8} sx={{ height: "100%" }}>
-              <Grid item xs={8} sx={{ height: "60%" }}>
+            <Grid container spacing={spacing / 8} sx={{ height: "100%", width: "100%" }}>
+              <Grid item xs={7} sx={{ height: "60%" }}>
                 {renderImageCell(0)}
               </Grid>
-              <Grid item xs={4} sx={{ height: "60%" }}>
+              <Grid item xs={5} sx={{ height: "60%" }}>
                 <Grid container direction="column" spacing={spacing / 8} sx={{ height: "100%" }}>
                   <Grid item xs={6}>
                     {renderImageCell(1)}
@@ -601,7 +569,7 @@ const Collages = () => {
       case "panorama":
         return (
           <Box ref={collageRef} sx={collageStyle}>
-            <Grid container spacing={spacing / 8} sx={{ height: "100%" }}>
+            <Grid container spacing={spacing / 8} sx={{ height: "100%", width: "100%" }}>
               <Grid item xs={12} sx={{ height: "50%" }}>
                 {renderImageCell(0)}
               </Grid>
@@ -618,23 +586,23 @@ const Collages = () => {
       case "heart":
         return (
           <Box ref={collageRef} sx={collageStyle}>
-            <Grid container spacing={spacing / 8} sx={{ height: "100%" }}>
-              <Grid item xs={6} sx={{ height: "33%" }}>
+            <Grid container spacing={spacing / 8} sx={{ height: "100%", width: "100%" }}>
+              <Grid item xs={4} sx={{ height: "33%" }}>
                 {renderImageCell(0)}
               </Grid>
-              <Grid item xs={6} sx={{ height: "33%" }}>
+              <Grid item xs={4} sx={{ height: "33%" }}>
                 {renderImageCell(1)}
               </Grid>
               <Grid item xs={4} sx={{ height: "33%" }}>
                 {renderImageCell(2)}
               </Grid>
-              <Grid item xs={4} sx={{ height: "33%" }}>
+              <Grid item xs={6} sx={{ height: "33%" }}>
                 {renderImageCell(3)}
               </Grid>
-              <Grid item xs={4} sx={{ height: "33%" }}>
+              <Grid item xs={6} sx={{ height: "33%" }}>
                 {renderImageCell(4)}
               </Grid>
-              <Grid item xs={12} sx={{ height: "33%" }}>
+              <Grid item xs={12} sx={{ height: "34%" }}>
                 {renderImageCell(5)}
               </Grid>
             </Grid>
@@ -666,13 +634,27 @@ const Collages = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 5 }}>
+    <Container maxWidth="xl" sx={{ py: 5, mt: 6 }}>
+      {" "}
+      {/* הוספת mt: 4 לפתרון בעיית החפיפה */}
       <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          עיצוב קולאז'ים
+
+
+        <Typography
+          variant="h2"
+          sx={{
+            fontWeight: 800,
+            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            mb: 2,
+            fontSize: { xs: "2.5rem", md: "3.5rem" },
+          }}
+        >
+          עיצוב קולאז' מהתמונות שלך
         </Typography>
       </Box>
-
       <Grid container spacing={3}>
         {/* אזור עריכת הקולאז' */}
         <Grid item xs={12} md={8}>
@@ -1028,7 +1010,6 @@ const Collages = () => {
           </Paper>
         </Grid>
       </Grid>
-
       {/* דיאלוג שמירת קולאז' */}
       {mounted && (
         <Dialog open={saveDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
@@ -1077,12 +1058,10 @@ const Collages = () => {
           </DialogActions>
         </Dialog>
       )}
-
       {/* Loading Backdrop */}
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-
       {/* הודעות למשתמש */}
       <Snackbar
         open={snackbarOpen}
@@ -1097,8 +1076,4 @@ const Collages = () => {
     </Container>
   )
 }
-
 export default Collages
-
-
-

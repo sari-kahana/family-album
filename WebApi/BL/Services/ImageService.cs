@@ -61,7 +61,6 @@ namespace BL.Services
         {
             var imgToRemove = await GetImageByIdAsync(id);
             imgToRemove.IsDeleted = true;
-            //_dataContext.Images.Remove(imgToRemove);
             await _dataContext.SaveChangesAsync();
             return imgToRemove;
 
@@ -84,78 +83,6 @@ namespace BL.Services
             return img;
         }
 
-        //public async Task<string> GetImageDescriptionAsync(string imageUrl)
-        //{
-        //    if (string.IsNullOrEmpty(imageUrl))
-        //    {
-        //        throw new ArgumentException("Image URL cannot be null or empty");
-        //    }
-
-        //    string prompt = $"תאר את התמונה הבאה ותכלול מילות מפתח שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
-
-        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
-
-        //    var requestBody = new
-        //    {
-        //        model = "gpt-4o-mini", // gpt-4o תומך בתמונות, gpt-4o-mini לא תמיד
-        //        messages = new[]
-        //        {
-        //            new
-        //            {
-        //                role = "user",
-        //                content = new object[]
-        //                {
-        //                    new
-        //                    {
-        //                        type = "text",
-        //                        text = prompt
-        //                    },
-        //                    new
-        //                    {
-        //                        type = "image_url",
-        //                        image_url = new
-        //                        {
-        //                            url = imageUrl,
-        //                            detail = "high" // או "low" לרזולוציה נמוכה יותר
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        },
-        //        max_tokens = 100
-        //    };
-
-        //    var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-
-        //    var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
-        //    var responseString = await response.Content.ReadAsStringAsync();
-
-        //    // שלב חשוב! הדפסה של מה שחוזר
-        //    Console.WriteLine("AI RESPONSE: " + responseString);
-
-        //    // בדיקה האם הצליח בכלל
-        //    if (!response.IsSuccessStatusCode)
-        //    {
-        //        throw new Exception($"OpenAI API error: {response.StatusCode} - {responseString}");
-        //    }
-
-        //    // נסיון לפרש את התשובה
-        //    dynamic result = JsonConvert.DeserializeObject(responseString);
-
-        //    // בדיקה בטוחה של choices
-        //    if (result?.choices != null && result.choices.Count > 0)
-        //    {
-        //        var aiMessage = result.choices[0].message.content.ToString();
-        //        return aiMessage;
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("תשובה לא תקינה: אין choices בתוצאה.");
-        //    }
-        //}
-
-
-
         public async Task<string> GetImageDescriptionAsync(string imageUrl)
         {
             try
@@ -165,7 +92,7 @@ namespace BL.Services
                     throw new ArgumentException("Image URL cannot be null or empty");
                 }
 
-                string prompt = $"תאר את התמונה הבאה תיאור תמציתי שיכלול מילות מפתח נפוצות שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
+                string prompt = $"תאר את התמונה הבאה תיאור תמציתי וקצר שיכלול מילות מפתח נפוצות שיעזרו בחיפוש תמונות על ידי המשתמש לפי התיאור שלך";
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 
@@ -237,11 +164,21 @@ namespace BL.Services
 
         public async Task<List<Image>> SearchImagesAsync(string query, int userId)
         {
-            var images = await _dataContext.Images
-                .Where(i => i.UserId==userId && i.Description.ToLower().Contains(query))
+            var albumIds = await _dataContext.Albums
+                .Where(a => a.UserId == userId && a.Name.ToLower().Contains(query.ToLower()))
+                .Select(a => a.Id)
                 .ToListAsync();
+
+            var images = await _dataContext.Images
+                .Where(i => i.UserId == userId &&
+                            (albumIds.Contains(i.AlbumId) || 
+                            i.Description.ToLower().Contains(query.ToLower())) &&
+                            !i.IsDeleted)
+                .ToListAsync();
+
             return images;
         }
+
     }
 }
 

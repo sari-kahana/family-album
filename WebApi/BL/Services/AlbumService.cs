@@ -46,15 +46,6 @@ namespace BL.Services
             return albumToRemove;
         }
 
-        //public Task<Album> UpdateAlbumAsync(int id, string albumName)
-        //{
-        //    var albumToUpdate = GetAlbumByIdAsync(id);
-        //    albumToUpdate.Result.Name = albumName;
-        //    albumToUpdate.Result.UpdatedAt = DateTime.Now;
-        //    _dataContext.Albums.Update(albumToUpdate.Result);
-        //    return albumToUpdate;
-        //}
-
         public async Task<Album> UpdateAlbumAsync(int id, string albumName)
         {
             var albumToUpdate = await GetAlbumByIdAsync(id);

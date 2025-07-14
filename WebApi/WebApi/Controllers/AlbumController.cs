@@ -74,11 +74,6 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAlbum(int id, [FromBody] string albumName)
         {
-            //if (album == null || id != album.Id)
-            //{
-            //    return BadRequest("Album data is invalid");
-            //}
-
             try
             {
                 var updatedAlbum = await _albumService.UpdateAlbumAsync(id, albumName);

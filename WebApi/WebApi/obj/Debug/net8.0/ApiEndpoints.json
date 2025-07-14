@@ -159,6 +159,38 @@
   },
   {
     "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "ProxySingle",
+    "RelativePath": "api/Image/proxy",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "url",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
+    "Method": "ProxyImagesBatch",
+    "RelativePath": "api/Image/proxy/batch",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "urls",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.ImageController",
     "Method": "SearchImages",
     "RelativePath": "api/Image/search",
     "HttpMethod": "GET",

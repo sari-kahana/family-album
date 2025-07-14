@@ -84,8 +84,10 @@ builder.Services.AddScoped<IDataContext, DataContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
-builder.Services.AddScoped<HttpClient>();
-//builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddHttpClient("MyClient", client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(5);
+});
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
