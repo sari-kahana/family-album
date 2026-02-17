@@ -39,10 +39,13 @@ import {
 } from "@mui/icons-material"
 import AppLayout from "./AppLayout"
 import { useNavigate } from "react-router-dom"
+import { useContext } from "react"
+import { UserContext } from "./user/UserContext"
 
 const HomePage = () => {
   const theme = useTheme()
   const navigate = useNavigate()
+  const { user } = useContext(UserContext)
 
   const features = [
     {
@@ -233,71 +236,75 @@ const HomePage = () => {
                   seamless collaboration features trusted by 50,000+ creators worldwide.
                 </Typography>
 
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={3}
-                  sx={{ justifyContent: { xs: "center", lg: "flex-start" }, mb: 6 }}
-                >
-                  <Button
-                    onClick={() => navigate('/register')}
-                    variant="contained"
-                    size="large"
-                    sx={{
-                      backgroundColor: "white",
-                      color: theme.palette.primary.main,
-                      px: 6,
-                      py: 2,
-                      fontSize: "1.1rem",
-                      fontWeight: 700,
-                      borderRadius: 2,
-                      textTransform: "none",
-                      boxShadow: "0 8px 30px rgba(255,255,255,0.3)",
-                      "&:hover": {
-                        backgroundColor: alpha("#ffffff", 0.95),
-                        transform: "translateY(-2px)",
-                        boxShadow: "0 12px 40px rgba(255,255,255,0.4)",
-                      },
-                    }}
-                    startIcon={<PersonAdd />}
-                  >
-                    Sign Up
-                  </Button>
+                {!user.isConnected && (
+                  <>
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={3}
+                      sx={{ justifyContent: { xs: "center", lg: "flex-start" }, mb: 6 }}
+                    >
+                      <Button
+                        onClick={() => navigate('/register')}
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          backgroundColor: "white",
+                          color: theme.palette.primary.main,
+                          px: 6,
+                          py: 2,
+                          fontSize: "1.1rem",
+                          fontWeight: 700,
+                          borderRadius: 2,
+                          textTransform: "none",
+                          boxShadow: "0 8px 30px rgba(255,255,255,0.3)",
+                          "&:hover": {
+                            backgroundColor: alpha("#ffffff", 0.95),
+                            transform: "translateY(-2px)",
+                            boxShadow: "0 12px 40px rgba(255,255,255,0.4)",
+                          },
+                        }}
+                        startIcon={<PersonAdd />}
+                      >
+                        Sign Up
+                      </Button>
 
-                  <Button
-                    onClick={()=> navigate('/login')}
-                    variant="outlined"
-                    size="large"
-                    sx={{
-                      borderColor: "white",
-                      color: "white",
-                      px: 6,
-                      py: 2,
-                      fontSize: "1.1rem",
-                      fontWeight: 600,
-                      borderRadius: 2,
-                      textTransform: "none",
-                      borderWidth: 2,
-                      "&:hover": {
-                        borderColor: "white",
-                        backgroundColor: alpha("#ffffff", 0.15),
-                        borderWidth: 2,
-                      },
-                    }}
-                    startIcon={<Login />}
-                  >
-                    Sign In
-                  </Button>
-                </Stack>
+                      <Button
+                        onClick={()=> navigate('/login')}
+                        variant="outlined"
+                        size="large"
+                        sx={{
+                          borderColor: "white",
+                          color: "white",
+                          px: 6,
+                          py: 2,
+                          fontSize: "1.1rem",
+                          fontWeight: 600,
+                          borderRadius: 2,
+                          textTransform: "none",
+                          borderWidth: 2,
+                          "&:hover": {
+                            borderColor: "white",
+                            backgroundColor: alpha("#ffffff", 0.15),
+                            borderWidth: 2,
+                          },
+                        }}
+                        startIcon={<Login />}
+                      >
+                        Sign In
+                      </Button>
+                    </Stack>
 
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: alpha("#ffffff", 0.7),
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  ✓ No credit card required • ✓ 14-day free trial • ✓ Cancel anytime
-                </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: alpha("#ffffff", 0.7),
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      ✓ No credit card required • ✓ 14-day free trial • ✓ Cancel anytime
+                    </Typography>
+                  </>
+                )}
               {/* </Box> */}
             </Grid>
 
