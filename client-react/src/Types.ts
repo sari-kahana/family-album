@@ -4,7 +4,8 @@ export type User = {
     email: string,
     password: string,
     phone: string,
-    isConnected: boolean
+    isConnected: boolean,
+    roles: string[]
 };
 export type Image = {
     id: number,

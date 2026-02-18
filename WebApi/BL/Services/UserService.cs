@@ -1,4 +1,4 @@
-﻿using BL.InterfacesServices;
+using BL.InterfacesServices;
 using DL;
 using DL.Entities;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +35,7 @@ namespace BL.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, username)
             };
 
@@ -48,13 +48,55 @@ namespace BL.Services
             var token = new JwtSecurityToken
             (
                 issuer: _configuration["JWT_ISSUER"],
-                audience: _configuration["Jwt_Audience"],
+                audience: _configuration["JWT_AUDIENCE"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<string[]> GetUserRolesAsync(int userId)
+        {
+            var roles = await _dataContext.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Include(ur => ur.Role)
+                .Select(ur => ur.Role.Name)
+                .ToArrayAsync();
+
+            return roles.Length > 0 ? roles : new[] { "User" };
+        }
+
+        public async Task AssignRoleAsync(int userId, string roleName)
+        {
+            var role = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+            if (role == null)
+                throw new Exception($"Role '{roleName}' not found");
+
+            var exists = await _dataContext.UserRoles
+                .AnyAsync(ur => ur.UserId == userId && ur.RoleId == role.Id);
+
+            if (!exists)
+            {
+                _dataContext.UserRoles.Add(new UserRoles { UserId = userId, RoleId = role.Id });
+                await _dataContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveRoleAsync(int userId, string roleName)
+        {
+            var role = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+            if (role == null) return;
+
+            var userRole = await _dataContext.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == role.Id);
+
+            if (userRole != null)
+            {
+                _dataContext.UserRoles.Remove(userRole);
+                await _dataContext.SaveChangesAsync();
+            }
         }
 
         public async Task<List<User>> GetAllUsersAsync()
@@ -70,6 +112,15 @@ namespace BL.Services
         {
                 _dataContext.Users.Add(user);
                 await _dataContext.SaveChangesAsync();
+
+                // Assign default "User" role
+                var defaultRole = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+                if (defaultRole != null)
+                {
+                    _dataContext.UserRoles.Add(new UserRoles { UserId = user.Id, RoleId = defaultRole.Id });
+                    await _dataContext.SaveChangesAsync();
+                }
+
                 return user;
         }
 
@@ -79,7 +130,7 @@ namespace BL.Services
             User user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null || user.Password != password)
             {
-                return null; 
+                return null;
             }
             return user;
         }

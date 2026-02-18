@@ -73,7 +73,9 @@ const Login = () => {
 
       if (response.data.user?.id) {
         localStorage.setItem("userId", response.data.user.id)
-        dispatch({ type: "LOGIN", data: response.data.user })
+        const roles = response.data.roles || []
+        localStorage.setItem("roles", JSON.stringify(roles))
+        dispatch({ type: "LOGIN", data: { ...response.data.user, roles } })
         navigate("/")
       }
     } catch (error: any) {

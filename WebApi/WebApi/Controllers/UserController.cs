@@ -23,7 +23,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        //[Authorize (Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
 
@@ -45,12 +45,14 @@ namespace WebApi.Controllers
         {
             var userToAdd = new User { Name = user.Name, Email = user.Email, Password = user.Password, CreatedBy = "" , UpdatedBy = ""};
             await _userService.AddUserAsync(userToAdd);
-            var token = await _userService.GenerateJwtTokenAsync(userToAdd.Name, new[] { "User" });
-            return Ok(new 
+            var roles = await _userService.GetUserRolesAsync(userToAdd.Id);
+            var token = await _userService.GenerateJwtTokenAsync(userToAdd.Name, roles);
+            return Ok(new
             {
                 Message = "User added successfully",
-                User = userToAdd,
-                Token = token
+                User = new { userToAdd.Id, userToAdd.Name, userToAdd.Email },
+                Token = token,
+                Roles = roles
             });
         }
 
@@ -66,12 +68,14 @@ namespace WebApi.Controllers
                     Console.WriteLine( "user null");
                     return Unauthorized(new { Message = "Invalid email or password" });
                 }
-                var token = await _userService.GenerateJwtTokenAsync(user.Name, new[] { "User" });
+                var roles = await _userService.GetUserRolesAsync(user.Id);
+                var token = await _userService.GenerateJwtTokenAsync(user.Name, roles);
                 return Ok(new
                 {
                     Message = "Login successful",
                     Token = token,
-                    User = new { user.Id, user.Name, user.Email }
+                    User = new { user.Id, user.Name, user.Email },
+                    Roles = roles
                 });
             }
             catch (Exception ex)
@@ -81,7 +85,7 @@ namespace WebApi.Controllers
         }
         
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpDateUserAsync(int id, [FromBody] User user)
         {
@@ -89,7 +93,7 @@ namespace WebApi.Controllers
             return Ok(user);
         }
 
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> RemoveUserAsync(int id)
         {

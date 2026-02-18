@@ -99,6 +99,9 @@ const Register = () => {
           localStorage.setItem("token", response.data.token)
         }
 
+        const roles = response.data.roles || ["User"]
+        localStorage.setItem("roles", JSON.stringify(roles))
+
         // Update user context - user is now logged in
         dispatch({
           type: "CREATE",
@@ -108,6 +111,7 @@ const Register = () => {
             email: userData.email || formData.email,
             password: formData.password,
             isConnected: true,
+            roles,
           },
         })
 
