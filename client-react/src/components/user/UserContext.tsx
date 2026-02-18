@@ -11,6 +11,7 @@ const userReducer = (state: User, action: Action): User => {
         email: action.data.email ?? state.email,
         password: action.data.password ?? state.password,
         phone: action.data.phone ?? state.phone,
+        roles: action.data.roles ?? state.roles,
         isConnected: true
       };
 
@@ -24,17 +25,14 @@ const userReducer = (state: User, action: Action): User => {
       return emptyUser;
 
     case "LOGIN":
-      return { 
-        ...state,
-        ...action.data,
-        isConnected: true 
-      };
-      
-    case "LOGOUT":
       return {
         ...state,
-        isConnected: false
+        ...action.data,
+        isConnected: true
       };
+
+    case "LOGOUT":
+      return emptyUser;
 
     default:
       return state;
@@ -48,6 +46,23 @@ export const emptyUser: User = {
   password: "",
   phone: "",
   isConnected: false,
+  roles: [],
+};
+
+const getInitialUser = (): User => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const roles = localStorage.getItem("roles");
+
+  if (token && userId) {
+    return {
+      ...emptyUser,
+      id: userId,
+      roles: roles ? JSON.parse(roles) : [],
+      isConnected: true,
+    };
+  }
+  return emptyUser;
 };
 
 export const UserContext = createContext<{
@@ -59,7 +74,7 @@ export const UserContext = createContext<{
 });
 
 const MyUserContext = ({ children }: { children: React.ReactNode }) => {
-  const [user, dispatch] = useReducer(userReducer, emptyUser);
+  const [user, dispatch] = useReducer(userReducer, getInitialUser());
   return (
     <UserContext value={{ user, dispatch }}>
       {children}

@@ -12,7 +12,7 @@ import {
   Stack,
   Box,
 } from "@mui/material"
-import { Logout as LogoutIcon, PhotoLibrary, Palette } from "@mui/icons-material"
+import { Logout as LogoutIcon, PhotoLibrary, Palette, AdminPanelSettings } from "@mui/icons-material"
 import type React from "react"
 import { useContext, useState } from "react"
 import { UserContext } from "./UserContext"
@@ -39,7 +39,8 @@ const Connected = () => {
   const handleLogout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("userId")
-    dispatch({ type: "LOGOUT", data: user })
+    localStorage.removeItem("roles")
+    dispatch({ type: "LOGOUT", data: { roles: [] } })
     navigate("/")
     handleClose()
   }
@@ -97,6 +98,17 @@ const Connected = () => {
   return (
     <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1, md: 1.5 }}>
       {/* Navigation Buttons */}
+      {user.roles?.includes("Admin") && (
+        <Button
+          component={Link}
+          to="/admin"
+          startIcon={<AdminPanelSettings sx={{ color: theme.palette.error.dark, fontSize: { xs: 18, sm: 20 } }} />}
+          sx={{ ...buttonSx, color: theme.palette.error.dark }}
+        >
+          Admin
+        </Button>
+      )}
+
       <Button
         component={Link}
         to="/collages"

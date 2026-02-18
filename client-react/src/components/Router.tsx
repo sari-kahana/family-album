@@ -9,6 +9,8 @@ import Collages from "./files/Collages";
 import SearchResults from "./files/SearchResults";
 import Login from "./user/Login";
 import Register from "./user/Register";
+import AdminDashboard from "./admin/AdminDashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router = createBrowserRouter([{
     path: '/',
@@ -22,8 +24,8 @@ const Router = createBrowserRouter([{
         { path: 'albums/:id/upload', element: <FileUploader/>},
         {path: 'collages', element: <Collages/>},
         { path: 'search', element: <SearchResults/> },
-
+        {path: 'admin', element: <ProtectedRoute requiredRole="Admin"><AdminDashboard/></ProtectedRoute>},
     ]
-    }]); 
+    }]);
 
 export default Router;

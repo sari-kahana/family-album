@@ -13,6 +13,7 @@ namespace DL.Entities
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public List<UserRoles> UserRoles { get; set; } = new List<UserRoles>();
 
         public Role()
         {
