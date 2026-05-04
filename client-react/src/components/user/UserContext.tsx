@@ -49,19 +49,35 @@ export const emptyUser: User = {
   roles: [],
 };
 
+// const getInitialUser = (): User => {
+//   const token = localStorage.getItem("token");
+//   const userId = localStorage.getItem("userId");
+//   const roles = localStorage.getItem("roles");
+
+//   if (token && userId) {
+//     return {
+//       ...emptyUser,
+//       id: userId,
+//       roles: roles ? JSON.parse(roles) : [],
+//       isConnected: true,
+//     };
+//   }
+//   return emptyUser;
+// };
 const getInitialUser = (): User => {
   const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-  const roles = localStorage.getItem("roles");
+  const userString = localStorage.getItem("user");
 
-  if (token && userId) {
+  if (token && userString) {
+    const user = JSON.parse(userString);
+
     return {
       ...emptyUser,
-      id: userId,
-      roles: roles ? JSON.parse(roles) : [],
+      ...user,
       isConnected: true,
     };
   }
+
   return emptyUser;
 };
 

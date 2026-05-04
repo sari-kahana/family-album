@@ -38,8 +38,7 @@ const Connected = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token")
-    localStorage.removeItem("userId")
-    localStorage.removeItem("roles")
+    localStorage.removeItem("user")
     dispatch({ type: "LOGOUT", data: { roles: [] } })
     navigate("/")
     handleClose()
